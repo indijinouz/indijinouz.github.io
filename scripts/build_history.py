@@ -341,9 +341,9 @@ function updateSorting() {
 countrySort.addEventListener("change", updateSorting);
 showSort.addEventListener("change", updateSorting);
 
-/* Option-click on Mac / Alt-click on Windows:
-   Close all nested sections and toggle the selected section.
-   Normal clicks retain the usual accordion behavior. */
+/* Option-click (Mac) / Alt-click (Windows):
+   Collapse sections at the same hierarchy level.
+   Normal clicking still toggles one section. */
 
 document.addEventListener("click", event => {
   if (!event.altKey) return;
@@ -356,13 +356,31 @@ document.addEventListener("click", event => {
 
   event.preventDefault();
 
-  const shouldOpen = !section.open;
+  let sections;
 
-  section.querySelectorAll("details").forEach(child => {
-    child.open = false;
+  if (section.classList.contains("country")) {
+    // Collapse every country on the page.
+    sections = document.querySelectorAll("details.country");
+
+  } else if (section.classList.contains("show")) {
+    // Collapse all shows within this country.
+    const country = section.closest("details.country");
+    if (!country) return;
+    sections = country.querySelectorAll("details.show");
+
+  } else if (section.classList.contains("episode")) {
+    // Collapse all episodes within this show.
+    const show = section.closest("details.show");
+    if (!show) return;
+    sections = show.querySelectorAll("details.episode");
+
+  } else {
+    return;
+  }
+
+  sections.forEach(item => {
+    item.open = false;
   });
-
-  section.open = shouldOpen;
 });
 
 updateSorting();
