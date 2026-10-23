@@ -46,3 +46,31 @@ for csv_file in sorted(folder.glob("*.csv")):
     output.write_text(page, encoding="utf-8")
 
 print("HTML tables generated successfully.")
+
+
+from urllib.parse import quote
+
+links = []
+
+for csv_file in sorted(folder.glob("*.csv"), reverse=True):
+    title = csv_file.stem
+    filename = quote(f"{title}.html")
+    links.append(
+        f'<li><a href="{filename}">{html.escape(title)}</a></li>'
+    )
+
+index_page = f"""<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>BMI Royalty Statements | Michael Angelo Garcia (Indijinouz)</title>
+</head>
+<body>
+<h1>BMI Royalty Statements</h1>
+<ul>
+{''.join(links)}
+</ul>
+</body>
+</html>"""
+
+(folder / "index.html").write_text(index_page, encoding="utf-8")
