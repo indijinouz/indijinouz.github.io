@@ -14,6 +14,7 @@ total = 0
 for file in sorted(source.glob("*.csv")):
     with file.open(encoding="utf-8-sig", newline="") as f:
         reader = csv.DictReader(f)
+
         if not reader.fieldnames:
             continue
 
@@ -67,7 +68,9 @@ for country, shows in sorted(data.items()):
                 f'<span class="count">{len(rows):,}</span></summary>'
             )
 
-            parts.append('<div class="table-wrap"><table><thead><tr>')
+            parts.append(
+                '<div class="table-wrap"><table><thead><tr>'
+            )
 
             for header in all_headers:
                 parts.append(f'<th>{esc(header)}</th>')
@@ -76,8 +79,12 @@ for country, shows in sorted(data.items()):
 
             for row in rows:
                 parts.append('<tr>')
+
                 for header in all_headers:
-                    parts.append(f'<td>{esc(row.get(header))}</td>')
+                    parts.append(
+                        f'<td>{esc(row.get(header))}</td>'
+                    )
+
                 parts.append('</tr>')
 
             parts.append('</tbody></table></div></details>')
@@ -98,9 +105,22 @@ page = """<!DOCTYPE html>
 :root {
   color-scheme: light dark;
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+
+  /* Default blue palette */
+
+  --country-bg: #3a4452;
+  --show-bg: #2a3544;
+  --episode-bg: #1a2433;
+
+  --table-header: #29374a;
+  --table-row: #141e2d;
+  --table-alt: #202c3d;
+  --table-border: #344355;
 }
 
-* { box-sizing: border-box; }
+* {
+  box-sizing: border-box;
+}
 
 body {
   max-width: 1200px;
@@ -125,7 +145,8 @@ h1 {
   display: flex;
   gap: 20px;
   flex-wrap: wrap;
-  margin-bottom: 28px;
+  margin-bottom: 20px;
+  align-items: center;
 }
 
 .sort-controls label {
@@ -142,6 +163,108 @@ h1 {
   color: #303846;
   font: inherit;
   cursor: pointer;
+}
+
+/* Appearance menu */
+
+.appearance {
+  margin-bottom: 28px;
+  max-width: 360px;
+}
+
+.appearance > summary {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  padding: 8px 0;
+  background: transparent;
+  color: #77808b;
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  list-style: none;
+}
+
+.appearance > summary::-webkit-details-marker {
+  display: none;
+}
+
+.appearance > summary::before {
+  content: "▸";
+  display: inline-block;
+  transition: transform 0.15s;
+}
+
+.appearance[open] > summary::before {
+  transform: rotate(90deg);
+}
+
+.appearance-panel {
+  padding: 16px;
+  margin-top: 5px;
+  border: 1px solid #d5d9df;
+  border-radius: 12px;
+  background: #f8f9fa;
+}
+
+.appearance-heading {
+  font-size: 13px;
+  font-weight: 600;
+  margin-bottom: 12px;
+}
+
+.hue-slider {
+  display: block;
+  width: 100%;
+  margin: 0 0 10px;
+  cursor: pointer;
+  accent-color: #6697d8;
+}
+
+.hue-spectrum {
+  height: 8px;
+  border-radius: 20px;
+  background: linear-gradient(
+    to right,
+    #f44,
+    #ff0,
+    #0e5,
+    #0cf,
+    #55f,
+    #f0f,
+    #f44
+  );
+}
+
+.palette-preview {
+  display: flex;
+  gap: 8px;
+  margin-top: 16px;
+}
+
+.palette-preview span {
+  flex: 1;
+  height: 24px;
+  border-radius: 6px;
+  border: 1px solid #ffffff22;
+}
+
+.swatch-country {
+  background: var(--country-bg);
+}
+
+.swatch-show {
+  background: var(--show-bg);
+}
+
+.swatch-episode {
+  background: var(--episode-bg);
+}
+
+.appearance-note {
+  font-size: 11px;
+  color: #77808b;
+  margin: 12px 0 0;
 }
 
 /* Collapsible sections */
@@ -229,17 +352,17 @@ tr:nth-child(even) {
   }
 
   .country > summary {
-    background: #3a4452;
+    background: var(--country-bg);
     color: #f1f2f4;
   }
 
   .show > summary {
-    background: #2a3544;
+    background: var(--show-bg);
     color: #eceef1;
   }
 
   .episode > summary {
-    background: #1a2433;
+    background: var(--episode-bg);
     color: #eceef1;
   }
 
@@ -249,21 +372,34 @@ tr:nth-child(even) {
     color: #f1f2f4;
   }
 
+  .appearance-panel {
+    background: #20242b;
+    border-color: #414650;
+  }
+
+  .appearance > summary {
+    color: #a9b4c4;
+  }
+
   .table-wrap {
-    border-color: #383b42;
+    background: var(--table-row);
+    border-color: var(--table-border);
   }
 
   th {
-    background: #292d34;
-    color: #eee;
+    background: var(--table-header);
+    color: #f0f3f8;
+    border-color: var(--table-border);
   }
 
   td {
-    border-color: #363940;
+    background: var(--table-row);
+    color: #f0f3f8;
+    border-color: var(--table-border);
   }
 
-  tr:nth-child(even) {
-    background: #1e2229;
+  tr:nth-child(even) td {
+    background: var(--table-alt);
   }
 }
 </style>
@@ -294,11 +430,43 @@ tr:nth-child(even) {
 
 </div>
 
+<details class="appearance">
+  <summary>Appearance</summary>
+
+  <div class="appearance-panel">
+    <div class="appearance-heading">Color theme</div>
+
+    <input
+      type="range"
+      id="hue-slider"
+      class="hue-slider"
+      min="0"
+      max="360"
+      value="214"
+      aria-label="Color theme hue"
+    >
+
+    <div class="hue-spectrum"></div>
+
+    <div class="palette-preview">
+      <span class="swatch-country"></span>
+      <span class="swatch-show"></span>
+      <span class="swatch-episode"></span>
+    </div>
+
+    <p class="appearance-note">
+      Slide to change all three levels and table colors.
+    </p>
+  </div>
+</details>
+
 CONTENT
 
 <script>
 const countrySort = document.getElementById("country-sort");
 const showSort = document.getElementById("show-sort");
+
+/* Sorting */
 
 function sortSections(parent, selector, mode) {
   const sections = Array.from(parent.children)
@@ -341,9 +509,8 @@ function updateSorting() {
 countrySort.addEventListener("change", updateSorting);
 showSort.addEventListener("change", updateSorting);
 
-/* Option-click (Mac) / Alt-click (Windows):
-   Collapse every section of the clicked level, globally.
-   Normal clicks toggle only the clicked section. */
+/* Option-click / Alt-click:
+   Collapse all sections at the clicked hierarchy level. */
 
 document.addEventListener("click", event => {
   if (!event.altKey) return;
@@ -354,38 +521,101 @@ document.addEventListener("click", event => {
   const section = summary.parentElement;
   if (!section.matches("details")) return;
 
-  event.preventDefault();
-
   let sections;
 
   if (section.classList.contains("country")) {
-    // Collapse all countries.
     sections = document.querySelectorAll("details.country");
 
   } else if (section.classList.contains("show")) {
-    // Collapse all shows across every country.
     sections = document.querySelectorAll("details.show");
 
   } else if (section.classList.contains("episode")) {
-    // Collapse all episodes across every show and country.
     sections = document.querySelectorAll("details.episode");
 
   } else {
     return;
   }
 
+  event.preventDefault();
+
   sections.forEach(item => {
     item.open = false;
   });
 });
 
+/* Live hue-based color theme */
+
+const hueSlider = document.getElementById("hue-slider");
+const root = document.documentElement;
+
+const defaultHue = 214;
+const storageKey = "bmi-history-hue";
+
+function applyHue(hue) {
+  const h = Number(hue);
+
+  if (!Number.isFinite(h) || h < 0 || h > 360) {
+    return;
+  }
+
+  hueSlider.value = h;
+
+  const colors = {
+    "--country-bg": `hsl(${h}, 17%, 28%)`,
+    "--show-bg": `hsl(${h}, 24%, 22%)`,
+    "--episode-bg": `hsl(${h}, 32%, 15%)`,
+
+    "--table-header": `hsl(${h}, 29%, 23%)`,
+    "--table-row": `hsl(${h}, 38%, 13%)`,
+    "--table-alt": `hsl(${h}, 31%, 19%)`,
+    "--table-border": `hsl(${h}, 24%, 27%)`
+  };
+
+  for (const [property, value] of Object.entries(colors)) {
+    root.style.setProperty(property, value);
+  }
+}
+
+/* Apply saved preference without sorting the page */
+
+let savedHue = null;
+
+try {
+  savedHue = localStorage.getItem(storageKey);
+} catch (error) {
+  // The page still works if browser storage is unavailable.
+}
+
+if (
+  savedHue !== null &&
+  savedHue !== "" &&
+  Number.isFinite(Number(savedHue))
+) {
+  applyHue(Number(savedHue));
+}
+
+/* Change colors instantly when moving the slider */
+
+hueSlider.addEventListener("input", () => {
+  applyHue(hueSlider.value);
+});
+
+/* Save the selected hue */
+
+hueSlider.addEventListener("change", () => {
+  try {
+    localStorage.setItem(storageKey, hueSlider.value);
+  } catch (error) {
+    // The chosen color still works for the current visit.
+  }
+});
 </script>
 
 </body>
 </html>"""
 
 page = page.replace("RECORD_COUNT", f"{total:,}")
-page = page.replace("CONTENT", "\n".join(parts))
+page = page.replace("CONTENT", "\\n".join(parts))
 
 output.write_text(page, encoding="utf-8")
 
