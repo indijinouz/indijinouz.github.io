@@ -6,9 +6,11 @@ on:
     branches: [main]
     paths:
       - 'bmi-royalty-statements/**'
-      - 'scripts/convert_csv.py'
-      - '.github/workflows/build-tables.yml'
+      - 'bmi-works-catalog/**'
+      - 'scripts/convert_royalties.py'
+      - 'scripts/convert_works.py'
       - 'scripts/build_history.py'
+      - '.github/workflows/build-tables.yml'
   workflow_dispatch:
 
 permissions:
@@ -22,17 +24,21 @@ jobs:
       - name: Get repository files
         uses: actions/checkout@v4
 
-      - name: Convert CSVs to HTML
-        run: python3 scripts/convert_csv.py
+      - name: Convert royalty CSVs to HTML
+        run: python3 scripts/convert_royalties.py
+
+      - name: Convert Works Catalog CSV to HTML
+        run: python3 scripts/convert_works.py
 
       - name: Build BMI Royalty History
-        run: python3 scripts/build_history.py  
+        run: python3 scripts/build_history.py
 
       - name: Save generated HTML pages
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add bmi-royalty-statements/
+          git add bmi-works-catalog/
           git add bmi-royalty-history.html
           if ! git diff --cached --quiet; then
             git commit -m "Update BMI HTML tables"
