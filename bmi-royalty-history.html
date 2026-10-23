@@ -104,7 +104,7 @@ summary {
 
 .table-wrap {
   overflow-x: auto;
-  margin: 12px 0 20px;
+  margin: 12px 0 20px 22px;
   border: 1px solid #ddd;
   border-radius: 10px;
 }
@@ -2389194,8 +2389194,8 @@ countrySort.addEventListener("change", updateSorting);
 showSort.addEventListener("change", updateSorting);
 
 /* Option-click (Mac) / Alt-click (Windows):
-   Collapse sections at the same hierarchy level.
-   Normal clicking still toggles one section. */
+   Collapse every section of the clicked level, globally.
+   Normal clicks toggle only the clicked section. */
 
 document.addEventListener("click", event => {
   if (!event.altKey) return;
@@ -2389211,20 +2389211,16 @@ document.addEventListener("click", event => {
   let sections;
 
   if (section.classList.contains("country")) {
-    // Collapse every country on the page.
+    // Collapse all countries.
     sections = document.querySelectorAll("details.country");
 
   } else if (section.classList.contains("show")) {
-    // Collapse all shows within this country.
-    const country = section.closest("details.country");
-    if (!country) return;
-    sections = country.querySelectorAll("details.show");
+    // Collapse all shows across every country.
+    sections = document.querySelectorAll("details.show");
 
   } else if (section.classList.contains("episode")) {
-    // Collapse all episodes within this show.
-    const show = section.closest("details.show");
-    if (!show) return;
-    sections = show.querySelectorAll("details.episode");
+    // Collapse all episodes across every show and country.
+    sections = document.querySelectorAll("details.episode");
 
   } else {
     return;
