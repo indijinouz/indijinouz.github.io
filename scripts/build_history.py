@@ -383,7 +383,6 @@ document.addEventListener("click", event => {
   });
 });
 
-updateSorting();
 </script>
 
 </body>
