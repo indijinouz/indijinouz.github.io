@@ -1,0 +1,35 @@
+
+name: Build BMI HTML Tables
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'bmi-royalty-statements/**'
+      - 'scripts/convert_csv.py'
+      - '.github/workflows/build-tables.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Get repository files
+        uses: actions/checkout@v4
+
+      - name: Convert CSVs to HTML
+        run: python3 scripts/convert_csv.py
+
+      - name: Save generated HTML pages
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add bmi-royalty-statements/*.html
+          if ! git diff --cached --quiet; then
+            git commit -m "Update BMI HTML tables"
+            git push
+          fi
