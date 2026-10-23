@@ -39,7 +39,14 @@ def esc(value):
 
 parts = []
 
-for country, shows in sorted(data.items()):
+for country, shows in sorted(
+    data.items(),
+    key=lambda item: (
+        -sum(len(rows) for episodes in item[1].values()
+             for rows in episodes.values()),
+        item[0]
+    )
+):
     country_count = sum(
         len(rows)
         for episodes in shows.values()
@@ -365,7 +372,6 @@ document.addEventListener("click", event => {
   section.open = shouldOpen;
 });
 
-updateSorting();
 </script>
 
 </body>
