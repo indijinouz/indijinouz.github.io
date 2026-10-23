@@ -280,7 +280,7 @@ tr:nth-child(even) {
     Countries:
     <select id="country-sort">
       <option value="alpha">Alphabetical</option>
-      <option value="count">Most Records</option>
+      <option value="count" selected>Most Records</option>
     </select>
   </label>
 
