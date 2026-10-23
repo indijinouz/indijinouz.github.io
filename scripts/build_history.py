@@ -39,14 +39,7 @@ def esc(value):
 
 parts = []
 
-for country, shows in sorted(
-    data.items(),
-    key=lambda item: (
-        -sum(len(rows) for episodes in item[1].values()
-             for rows in episodes.values()),
-        item[0]
-    )
-):
+for country, shows in sorted(data.items()):
     country_count = sum(
         len(rows)
         for episodes in shows.values()
@@ -287,7 +280,7 @@ tr:nth-child(even) {
     Countries:
     <select id="country-sort">
       <option value="alpha">Alphabetical</option>
-      <option value="count" selected>Most Records</option>
+      <option value="count">Most Records</option>
     </select>
   </label>
 
@@ -372,6 +365,7 @@ document.addEventListener("click", event => {
   section.open = shouldOpen;
 });
 
+updateSorting();
 </script>
 
 </body>
