@@ -69,7 +69,14 @@ def esc(value):
 
 parts = []
 
-for country, shows in sorted(data.items()):
+for country, shows in sorted(
+    data.items(),
+    key=lambda item: -sum(
+        len(rows)
+        for episodes in item[1].values()
+        for rows in episodes.values()
+    )
+):
     country_count = sum(
         len(rows)
         for episodes in shows.values()
@@ -318,8 +325,8 @@ tr:nth-child(even) {
   <label for="country-sort">
     Countries:
     <select id="country-sort">
-      <option value="alpha">Alphabetical</option>
-      <option value="count">Most Records</option>
+     <option value="alpha">Alphabetical</option>
+    <option value="count" selected>Most Records</option>
     </select>
   </label>
 
