@@ -120,7 +120,7 @@ page = """<!DOCTYPE html>
 <body class="accordion-page">
 
 <h1>Michael Angelo Garcia (Indijinouz)</h1>
-<h2>Complete Works Catalog</h2>
+<h2>BMI Works Catalog</h2>
 <p class="subtitle">WORK_COUNT registered works</p>
 
 <div class="catalog-search">
