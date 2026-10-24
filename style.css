@@ -230,8 +230,8 @@ tr:nth-child(even) {
   display: flex;
   flex-direction: row-reverse;
   align-items: center;
-  justify-content: space-between;
-  gap: 16px;
+  justify-content: flex-start;
+  gap: 12px;
   margin-bottom: 28px;
 }
 
