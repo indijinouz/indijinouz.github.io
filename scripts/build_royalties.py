@@ -146,7 +146,7 @@ page = """<!DOCTYPE html>
     Countries:
     <select id="country-sort">
       <option value="alpha">Alphabetical</option>
-      <option value="count" selected>Records</option>
+      <option value="count" selected>Count</option>
     </select>
   </label>
 
@@ -154,7 +154,7 @@ page = """<!DOCTYPE html>
     Shows:
     <select id="show-sort">
       <option value="alpha">Alphabetical</option>
-      <option value="count">Records</option>
+      <option value="count">Count</option>
     </select>
   </label>
 
