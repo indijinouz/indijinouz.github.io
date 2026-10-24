@@ -32,7 +32,6 @@ parts = [
     "<body>",
     "<h1>Michael Angelo Garcia (Indijinouz)</h1>",
     "<h2>BMI Works Catalog</h2>",
-    f"<p>{len(records):,} records</p>",
     "<table>",
     "<thead><tr>",
 ]
