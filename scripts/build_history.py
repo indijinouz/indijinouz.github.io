@@ -309,8 +309,9 @@ tr:nth-child(even) {
 
 <body>
 
-<h1>BMI Royalty History</h1>
-<p class="subtitle">Michael Angelo Garcia (Indijinouz) · RECORD_COUNT records</p>
+<h1>Michael Angelo Garcia (Indijinouz)</h1>
+<h2>BMI Royalty History</h2>
+<p class="subtitle">RECORD_COUNT records</p>
 
 <div class="sort-controls">
 
