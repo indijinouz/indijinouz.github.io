@@ -90,7 +90,8 @@ index_page = f"""<!DOCTYPE html>
 {style}
 </head>
 <body>
-<h1>BMI Royalty Statements</h1>
+<h1>Michael Angelo Garcia (Indijinouz)</h1>
+<h2>BMI Royalty Statements</h2>
 <ul>
 {''.join(links)}
 </ul>
