@@ -54,6 +54,10 @@ tr:nth-child(even) {
   margin-bottom: 4px;
 }
 
+.accordion-page h2 {
+  color: #E6BE78;
+}
+
 .accordion-page .subtitle {
   color: gray;
   margin-bottom: 24px;
