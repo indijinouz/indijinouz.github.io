@@ -106,7 +106,7 @@ page = """<!DOCTYPE html>
 <link rel="stylesheet" href="/style.css">
 </head>
 
-<body class="royalty-history works-history">
+<body class="accordion-page">
 
 <h1>Michael Angelo Garcia (Indijinouz)</h1>
 <h2>BMI Works Catalog</h2>
