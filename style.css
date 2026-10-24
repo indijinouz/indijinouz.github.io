@@ -275,42 +275,27 @@ tr:nth-child(even) {
 
 
 /* =========================================
-   ROYALTY STATEMENTS DIRECTORY
-   Retro folder layout matching homepage
+   DIRECTORY STYLING
+   Shared by homepage and statement directory
    ========================================= */
 
-.statement-directory {
+.directory {
   font-family: monospace;
-  font-size: 20px;
-  line-height: 1.8;
+  line-height: 2;
 }
 
-.statement-directory .year-folder {
-  margin-bottom: 8px;
+.directory .folder {
+  margin-top: 16px;
 }
 
-.statement-directory .year-folder summary {
-  cursor: pointer;
-  list-style: none;
-  width: fit-content;
+.directory .folder:first-child {
+  margin-top: 0;
 }
 
-.statement-directory .year-folder summary::-webkit-details-marker {
-  display: none;
+.directory .folder-links {
+  margin-left: 30px;
 }
 
-.statement-directory .year-folder summary::marker {
-  content: "";
-}
-
-.statement-directory .quarter-links {
-  margin-left: 40px;
-}
-
-.statement-directory .quarter-link {
+.directory .folder-links div {
   white-space: nowrap;
-}
-
-.statement-directory .quarter-link span {
-  color: #111;
 }
