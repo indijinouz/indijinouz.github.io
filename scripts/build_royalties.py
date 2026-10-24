@@ -100,7 +100,8 @@ for country, shows in sorted(
 
         for episode, rows in sorted(episodes.items()):
             parts.append(
-                f'<details class="episode"><summary>{esc(episode)}'
+                f'<details class="episode" data-name="{esc(episode)}">'
+                f'<summary>{esc(episode)}'
                 f'<span class="count">{len(rows):,}</span></summary>'
             )
 
@@ -133,6 +134,63 @@ page = """<!DOCTYPE html>
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>BMI Royalty History | Michael Angelo Garcia (Indijinouz)</title>
 <link rel="stylesheet" href="/style.css">
+
+<style>
+
+/* Search bar */
+
+.search-container {
+  max-width: 700px;
+  margin: 24px auto 20px;
+}
+
+.search-box {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+#royalty-search {
+  flex: 1;
+  min-width: 0;
+  padding: 12px 16px;
+  font: inherit;
+  font-size: 16px;
+  color: inherit;
+  background: transparent;
+  border: 1px solid #999;
+  border-radius: 6px;
+  box-sizing: border-box;
+}
+
+#royalty-search:focus {
+  outline: 2px solid #777;
+  outline-offset: 2px;
+}
+
+#clear-search {
+  padding: 10px 14px;
+  font: inherit;
+  cursor: pointer;
+  border: 1px solid #999;
+  border-radius: 6px;
+  background: transparent;
+  color: inherit;
+}
+
+#clear-search:disabled {
+  opacity: 0.4;
+  cursor: default;
+}
+
+#search-status {
+  margin-top: 8px;
+  font-size: 13px;
+  opacity: 0.7;
+  text-align: left;
+}
+
+</style>
 </head>
 
 <body class="accordion-page">
@@ -140,6 +198,34 @@ page = """<!DOCTYPE html>
 <h1>Michael Angelo Garcia (Indijinouz)</h1>
 <h2>BMI Royalty History</h2>
 <p class="subtitle">RECORD_COUNT records</p>
+
+<!-- Search -->
+
+<div class="search-container">
+
+  <div class="search-box">
+
+    <input
+      type="search"
+      id="royalty-search"
+      placeholder="Search songs, shows, episodes, countries..."
+      aria-label="Search BMI royalty history"
+      autocomplete="off"
+    >
+
+    <button id="clear-search" type="button" disabled>
+      Clear
+    </button>
+
+  </div>
+
+  <div id="search-status" role="status" aria-live="polite">
+    Search across all royalty records
+  </div>
+
+</div>
+
+<!-- Sorting -->
 
 <div class="sort-controls">
 
@@ -154,24 +240,41 @@ page = """<!DOCTYPE html>
   <label for="show-sort">
     Shows:
     <select id="show-sort">
-      <option value="alpha">Alphabetical</option>
+      <option value="alpha" selected>Alphabetical</option>
       <option value="count">Most Records</option>
     </select>
   </label>
 
 </div>
 
+<!-- Royalty records -->
+
 CONTENT
 
 <script>
+
 const countrySort = document.getElementById("country-sort");
 const showSort = document.getElementById("show-sort");
 
+const searchInput = document.getElementById("royalty-search");
+const clearButton = document.getElementById("clear-search");
+const searchStatus = document.getElementById("search-status");
+
+let searchTimer = null;
+let savedOpenStates = null;
+let activeSearch = false;
+
+/* --------------------------------------------------
+   Sorting
+-------------------------------------------------- */
+
 function sortSections(parent, selector, mode) {
+
   const sections = Array.from(parent.children)
     .filter(el => el.matches(selector));
 
   sections.sort((a, b) => {
+
     if (mode === "count") {
       const difference =
         Number(b.dataset.count) - Number(a.dataset.count);
@@ -184,12 +287,15 @@ function sortSections(parent, selector, mode) {
       undefined,
       { sensitivity: "base" }
     );
+
   });
 
   sections.forEach(section => parent.appendChild(section));
+
 }
 
 function updateSorting() {
+
   sortSections(
     document.body,
     "details.country",
@@ -197,28 +303,278 @@ function updateSorting() {
   );
 
   document.querySelectorAll("details.country").forEach(country => {
+
     sortSections(
       country,
       "details.show",
       showSort.value
     );
+
   });
+
 }
 
 countrySort.addEventListener("change", updateSorting);
 showSort.addEventListener("change", updateSorting);
 
-/* Option-click (Mac) / Alt-click (Windows):
-   Collapse every section of the clicked level, globally.
-   Normal clicks toggle only the clicked section. */
+
+/* --------------------------------------------------
+   Build search index once
+-------------------------------------------------- */
+
+function directChildren(parent, selector) {
+  return Array.from(parent.children)
+    .filter(child => child.matches(selector));
+}
+
+const searchIndex = directChildren(
+  document.body,
+  "details.country"
+).map(country => ({
+
+  element: country,
+  name: country.dataset.name.toLowerCase(),
+
+  shows: directChildren(country, "details.show").map(show => ({
+
+    element: show,
+    name: show.dataset.name.toLowerCase(),
+
+    episodes: directChildren(show, "details.episode").map(episode => ({
+
+      element: episode,
+      name: episode.dataset.name.toLowerCase(),
+
+      rows: Array.from(
+        episode.querySelectorAll("tbody tr")
+      ).map(row => ({
+
+        element: row,
+        text: row.textContent.toLowerCase()
+
+      }))
+
+    }))
+
+  }))
+
+}));
+
+
+/* --------------------------------------------------
+   Save and restore accordion states
+-------------------------------------------------- */
+
+function saveAccordionStates() {
+
+  savedOpenStates = new Map();
+
+  document.querySelectorAll("details").forEach(section => {
+    savedOpenStates.set(section, section.open);
+  });
+
+}
+
+function restoreAccordionStates() {
+
+  if (!savedOpenStates) return;
+
+  savedOpenStates.forEach((wasOpen, section) => {
+    section.open = wasOpen;
+  });
+
+  savedOpenStates = null;
+
+}
+
+
+/* --------------------------------------------------
+   Search
+-------------------------------------------------- */
+
+function performSearch() {
+
+  const query = searchInput.value.trim().toLowerCase();
+
+  clearButton.disabled = !query;
+
+  // Empty search: restore everything.
+
+  if (!query) {
+
+    searchIndex.forEach(country => {
+
+      country.element.style.display = "";
+
+      country.shows.forEach(show => {
+
+        show.element.style.display = "";
+
+        show.episodes.forEach(episode => {
+
+          episode.element.style.display = "";
+
+          episode.rows.forEach(row => {
+            row.element.style.display = "";
+          });
+
+        });
+
+      });
+
+    });
+
+    restoreAccordionStates();
+
+    activeSearch = false;
+
+    searchStatus.textContent =
+      "Search across all royalty records";
+
+    return;
+  }
+
+  // Save the user's original expanded/collapsed view.
+
+  if (!activeSearch) {
+    saveAccordionStates();
+    activeSearch = true;
+  }
+
+  let matchingRecords = 0;
+
+  searchIndex.forEach(country => {
+
+    const countryMatches = country.name.includes(query);
+
+    let countryHasMatches = false;
+
+    country.shows.forEach(show => {
+
+      const showMatches =
+        countryMatches || show.name.includes(query);
+
+      let showHasMatches = false;
+
+      show.episodes.forEach(episode => {
+
+        const episodeMatches =
+          showMatches || episode.name.includes(query);
+
+        let episodeMatchCount = 0;
+
+        episode.rows.forEach(row => {
+
+          const matches =
+            episodeMatches || row.text.includes(query);
+
+          row.element.style.display =
+            matches ? "" : "none";
+
+          if (matches) {
+            episodeMatchCount++;
+          }
+
+        });
+
+        const episodeHasMatches = episodeMatchCount > 0;
+
+        episode.element.style.display =
+          episodeHasMatches ? "" : "none";
+
+        if (episodeHasMatches) {
+
+          episode.element.open = true;
+
+          showHasMatches = true;
+          matchingRecords += episodeMatchCount;
+
+        }
+
+      });
+
+      show.element.style.display =
+        showHasMatches ? "" : "none";
+
+      if (showHasMatches) {
+
+        show.element.open = true;
+        countryHasMatches = true;
+
+      }
+
+    });
+
+    country.element.style.display =
+      countryHasMatches ? "" : "none";
+
+    if (countryHasMatches) {
+      country.element.open = true;
+    }
+
+  });
+
+  searchStatus.textContent =
+    matchingRecords.toLocaleString() +
+    (matchingRecords === 1
+      ? " matching record"
+      : " matching records");
+
+}
+
+
+/* --------------------------------------------------
+   Debounced live search
+-------------------------------------------------- */
+
+searchInput.addEventListener("input", () => {
+
+  clearTimeout(searchTimer);
+
+  searchTimer = setTimeout(() => {
+    performSearch();
+  }, 250);
+
+});
+
+
+/* --------------------------------------------------
+   Clear search
+-------------------------------------------------- */
+
+clearButton.addEventListener("click", () => {
+
+  clearTimeout(searchTimer);
+
+  searchInput.value = "";
+
+  performSearch();
+
+  searchInput.focus();
+
+});
+
+
+/* --------------------------------------------------
+   Option-click / Alt-click collapsing
+
+   Country: collapse all countries
+   Show: collapse all shows
+   Episode: collapse all episodes
+
+   Normal clicks retain native accordion behavior.
+-------------------------------------------------- */
 
 document.addEventListener("click", event => {
+
   if (!event.altKey) return;
 
   const summary = event.target.closest("summary");
+
   if (!summary) return;
 
   const section = summary.parentElement;
+
   if (!section.matches("details")) return;
 
   event.preventDefault();
@@ -226,21 +582,27 @@ document.addEventListener("click", event => {
   let sections;
 
   if (section.classList.contains("country")) {
+
     sections = document.querySelectorAll("details.country");
 
   } else if (section.classList.contains("show")) {
+
     sections = document.querySelectorAll("details.show");
 
   } else if (section.classList.contains("episode")) {
+
     sections = document.querySelectorAll("details.episode");
 
   } else {
+
     return;
+
   }
 
   sections.forEach(item => {
     item.open = false;
   });
+
 });
 
 </script>
@@ -249,7 +611,7 @@ document.addEventListener("click", event => {
 </html>"""
 
 page = page.replace("RECORD_COUNT", f"{total:,}")
-page = page.replace("CONTENT", "\n".join(parts))
+page = page.replace("CONTENT", "\\n".join(parts))
 
 output.write_text(page, encoding="utf-8")
 
