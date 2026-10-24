@@ -6,18 +6,16 @@ from urllib.parse import quote
 
 folder = Path("bmi-royalty-statements")
 
-# Shared styling for royalty tables and index page.
-# Matches the BMI Works Catalog.
+# Columns excluded from public HTML pages.
 
-style = """
-<style>
-body { font-family: Arial, sans-serif; margin: 30px; }
-table { border-collapse: collapse; font-size: 13px; }
-th, td { border: 1px solid #ccc; padding: 8px; text-align: left; }
-th { background: #eee; }
-tr:nth-child(even) { background: #f8f8f8; }
-</style>
-"""
+excluded_columns = {
+    "ROYALTY AMOUNT",
+    "WITHHOLD",
+    "CURRENT ACTIVITY AMT",
+    "HITS SONG OR TV NET SUPER USAGE BONUS",
+    "STANDARDS OR TV NET THEME BONUS",
+    "FOREIGN SOCIETY ADJUSTMENT",
+}
 
 # Generate an HTML table for every quarterly CSV.
 
@@ -29,9 +27,15 @@ for csv_file in sorted(folder.glob("*.csv")):
         continue
 
     title = csv_file.stem
-    headers = rows[0]
-    while headers and not headers[-1].strip():
-        headers.pop()
+
+    # Keep only named, non-excluded columns.
+    keep_columns = [
+        i for i, header in enumerate(rows[0])
+        if header.strip()
+        and header.strip().upper() not in excluded_columns
+    ]
+
+    headers = [rows[0][i] for i in keep_columns]
 
     table = ["<table>"]
     table.append("<thead><tr>")
@@ -44,8 +48,8 @@ for csv_file in sorted(folder.glob("*.csv")):
     for row in rows[1:]:
         table.append("<tr>")
 
-        # Keep the same number of cells as the header.
-        for value in row[:len(headers)]:
+        for i in keep_columns:
+            value = row[i] if i < len(row) else ""
             table.append(f"<td>{html.escape(value)}</td>")
 
         table.append("</tr>")
@@ -58,7 +62,7 @@ for csv_file in sorted(folder.glob("*.csv")):
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>BMI {html.escape(title)} | Michael Angelo Garcia (Indijinouz)</title>
-{style}
+<link rel="stylesheet" href="/style.css">
 </head>
 <body>
 <h1>Michael Angelo Garcia (Indijinouz)</h1>
@@ -90,7 +94,7 @@ index_page = f"""<!DOCTYPE html>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>BMI Royalty Statements | Michael Angelo Garcia (Indijinouz)</title>
-{style}
+<link rel="stylesheet" href="/style.css">
 </head>
 <body>
 <h1>Michael Angelo Garcia (Indijinouz)</h1>
