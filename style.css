@@ -236,7 +236,7 @@ tr:nth-child(even) {
 }
 
 .accordion-page .catalog-search input {
-  flex: 0 1 250px;
+  flex: 0 1 300px;
   min-width: 0;
   padding: 12px 16px;
   border: 1px solid #d5d9df;
