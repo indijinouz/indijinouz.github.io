@@ -9,7 +9,7 @@ on:
       - 'bmi-works-catalog/**'
       - 'scripts/convert_royalties.py'
       - 'scripts/convert_works.py'
-      - 'scripts/build_history.py'
+      - 'scripts/build_royalties.py'
       - '.github/workflows/build-tables.yml'
   workflow_dispatch:
 
@@ -31,7 +31,7 @@ jobs:
         run: python3 scripts/convert_works.py
 
       - name: Build BMI Royalty History
-        run: python3 scripts/build_history.py
+        run: python3 scripts/build_royalties.py
 
       - name: Save generated HTML pages
         run: |
