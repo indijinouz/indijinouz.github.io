@@ -5,12 +5,14 @@ on:
   push:
     branches: [main]
     paths:
+      - '**/*.html'
       - 'bmi-royalty-statements/**'
       - 'bmi-works-catalog/**'
       - 'scripts/convert_royalties.py'
       - 'scripts/convert_works.py'
       - 'scripts/build_royalties.py'
       - 'scripts/build_works.py'
+      - 'scripts/build_sitemap.py'
       - '.github/workflows/build-tables.yml'
   workflow_dispatch:
 
@@ -37,7 +39,10 @@ jobs:
       - name: Build BMI Works Catalog
         run: python3 scripts/build_works.py
 
-      - name: Save generated HTML pages
+      - name: Build sitemap
+        run: python3 scripts/build_sitemap.py
+
+      - name: Save generated HTML pages and sitemap
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
@@ -45,7 +50,8 @@ jobs:
           git add bmi-works-catalog/
           git add bmi-royalty-history.html
           git add bmi-works-history.html
+          git add sitemap.xml
           if ! git diff --cached --quiet; then
-            git commit -m "Update BMI HTML tables"
+            git commit -m "Update BMI HTML tables and sitemap"
             git push
           fi
