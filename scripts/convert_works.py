@@ -26,7 +26,7 @@ parts = [
     "<head>",
     '<meta charset="UTF-8">',
     '<meta name="viewport" content="width=device-width, initial-scale=1">',
-    "<title>BMIT Works Catalog | Michael Angelo Garcia (Indijinouz)</title>",
+    "<title>BMI Works Catalog | Michael Angelo Garcia (Indijinouz)</title>",
     "<style>",
     "body { font-family: Arial, sans-serif; margin: 30px; }",
     "table { border-collapse: collapse; font-size: 13px; }",
