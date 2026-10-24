@@ -132,189 +132,10 @@ page = """<!DOCTYPE html>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>BMI Royalty History | Michael Angelo Garcia (Indijinouz)</title>
-
-<style>
-:root {
-  color-scheme: light dark;
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-}
-
-* { box-sizing: border-box; }
-
-body {
-  max-width: 1200px;
-  margin: 50px auto;
-  padding: 0 24px;
-  line-height: 1.5;
-}
-
-h1 {
-  font-size: 30px;
-  margin-bottom: 4px;
-}
-
-.subtitle {
-  color: gray;
-  margin-bottom: 24px;
-}
-
-/* Sorting controls */
-
-.sort-controls {
-  display: flex;
-  gap: 20px;
-  flex-wrap: wrap;
-  margin-bottom: 28px;
-}
-
-.sort-controls label {
-  font-size: 13px;
-  color: #77808b;
-}
-
-.sort-controls select {
-  margin-left: 7px;
-  padding: 7px 10px;
-  border: 1px solid #d5d9df;
-  border-radius: 8px;
-  background: #f8f9fa;
-  color: #303846;
-  font: inherit;
-  cursor: pointer;
-}
-
-/* Collapsible sections */
-
-details {
-  margin: 8px 0;
-}
-
-summary {
-  cursor: pointer;
-  padding: 13px 16px;
-  border-radius: 10px;
-  display: list-item;
-  font-weight: 500;
-}
-
-.country > summary {
-  background: #e9edf2;
-  color: #18212d;
-  font-weight: 650;
-}
-
-.show {
-  margin-left: 22px;
-}
-
-.show > summary {
-  background: #f2f4f7;
-  color: #303846;
-}
-
-.episode {
-  margin-left: 22px;
-}
-
-.episode > summary {
-  background: #f8f9fa;
-  color: #414b59;
-}
-
-.count {
-  float: right;
-  font-size: 12px;
-  color: #77808b;
-  font-weight: 400;
-}
-
-/* Records table */
-
-.table-wrap {
-  overflow-x: auto;
-  margin: 12px 0 20px 22px;
-  border: 1px solid #ddd;
-  border-radius: 10px;
-}
-
-table {
-  border-collapse: collapse;
-  width: 100%;
-  font-size: 12px;
-}
-
-th, td {
-  padding: 9px 12px;
-  text-align: left;
-  border-bottom: 1px solid #e5e7eb;
-  white-space: nowrap;
-}
-
-th {
-  background: #f3f4f6;
-  color: #333;
-}
-
-tr:nth-child(even) {
-  background: #fafafa;
-}
-
-/* Dark mode */
-
-@media (prefers-color-scheme: dark) {
-  body {
-    background: #16181c;
-    color: #f1f2f4;
-  }
-
-  .country > summary {
-    background: #3a4452;
-    color: #f1f2f4;
-  }
-
-  .show > summary {
-    background: #2a3544;
-    color: #eceef1;
-  }
-
-  .episode > summary {
-    background: #1a2433;
-    color: #eceef1;
-  }
-
-  .sort-controls select {
-    background: #292e36;
-    border-color: #414650;
-    color: #f1f2f4;
-  }
-
-  /* Table colors coordinated with the episode palette */
-
-  .table-wrap {
-    background: #141e2d;
-    border-color: #344355;
-  }
-
-  th {
-    background: #29374a;
-    color: #f0f3f8;
-    border-color: #344355;
-  }
-
-  td {
-    background: #141e2d;
-    color: #f0f3f8;
-    border-color: #344355;
-  }
-
-  tr:nth-child(even) td {
-    background: #202c3d;
-  }
-}
-</style>
+<link rel="stylesheet" href="/style.css">
 </head>
 
-<body>
+<body class="royalty-history">
 
 <h1>Michael Angelo Garcia (Indijinouz)</h1>
 <h2>BMI Royalty History</h2>
@@ -325,8 +146,8 @@ tr:nth-child(even) {
   <label for="country-sort">
     Countries:
     <select id="country-sort">
-     <option value="alpha">Alphabetical</option>
-    <option value="count" selected>Most Records</option>
+      <option value="alpha">Alphabetical</option>
+      <option value="count" selected>Most Records</option>
     </select>
   </label>
 
@@ -405,15 +226,12 @@ document.addEventListener("click", event => {
   let sections;
 
   if (section.classList.contains("country")) {
-    // Collapse all countries.
     sections = document.querySelectorAll("details.country");
 
   } else if (section.classList.contains("show")) {
-    // Collapse all shows across every country.
     sections = document.querySelectorAll("details.show");
 
   } else if (section.classList.contains("episode")) {
-    // Collapse all episodes across every show and country.
     sections = document.querySelectorAll("details.episode");
 
   } else {
