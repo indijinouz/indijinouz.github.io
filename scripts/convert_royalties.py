@@ -54,7 +54,7 @@ for csv_file in sorted(folder.glob("*.csv")):
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Michael Angelo Garcia (Indijinouz) - BMI {html.escape(title)}</title>
+<title>BMI {html.escape(title)} | Michael Angelo Garcia (Indijinouz)</title>
 {style}
 </head>
 <body>
