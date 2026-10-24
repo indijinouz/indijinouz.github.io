@@ -77,7 +77,8 @@ for csv_file in sorted(folder.glob("*.csv")):
 print("HTML tables generated successfully.")
 
 
-# Generate the index page with expandable year folders.
+
+# Generate the statement directory, grouped by year.
 
 from collections import defaultdict
 
@@ -92,25 +93,22 @@ for csv_file in folder.glob("*.csv"):
 directory = []
 
 for year in sorted(years, reverse=True):
-    directory.append(
-        f'<details class="year-folder">'
-        f'<summary>📁 {html.escape(year)}</summary>'
-        f'<div class="quarter-links">'
-    )
-
     quarters = sorted(years[year], reverse=True)
+
+    directory.append(
+        f'<div class="folder">📁 {html.escape(year)}'
+        f'<div class="folder-links">'
+    )
 
     for i, (title, filename) in enumerate(quarters):
         branch = "└──" if i == len(quarters) - 1 else "├──"
 
         directory.append(
-            f'<div class="quarter-link">'
-            f'<span>{branch}</span> '
-            f'<a href="{filename}">{html.escape(title)}</a>'
-            f'</div>'
+            f'<div>{branch} '
+            f'<a href="{filename}">{html.escape(title)}</a></div>'
         )
 
-    directory.append("</div></details>")
+    directory.append("</div></div>")
 
 index_page = f"""<!DOCTYPE html>
 <html lang="en">
@@ -123,7 +121,7 @@ index_page = f"""<!DOCTYPE html>
 <body>
 <h1>Michael Angelo Garcia (Indijinouz)</h1>
 <h2>BMI Royalty Statements</h2>
-<div class="statement-directory">
+<div class="directory">
 {''.join(directory)}
 </div>
 </body>
