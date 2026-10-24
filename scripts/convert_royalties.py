@@ -30,9 +30,6 @@ for csv_file in sorted(folder.glob("*.csv")):
 
     title = csv_file.stem
     headers = rows[0]
-    if not headers[-1].strip():
-        rows = [row[:-1] for row in rows]
-        headers = rows[0]
 
     table = ["<table>"]
     table.append("<thead><tr>")
@@ -45,7 +42,8 @@ for csv_file in sorted(folder.glob("*.csv")):
     for row in rows[1:]:
         table.append("<tr>")
 
-        for value in row:
+        # Keep the same number of cells as the header.
+        for value in row[:len(headers)]:
             table.append(f"<td>{html.escape(value)}</td>")
 
         table.append("</tr>")
