@@ -611,7 +611,7 @@ document.addEventListener("click", event => {
 </html>"""
 
 page = page.replace("RECORD_COUNT", f"{total:,}")
-page = page.replace("CONTENT", "\\n".join(parts))
+page = page.replace("CONTENT", "\n".join(parts))
 
 output.write_text(page, encoding="utf-8")
 
