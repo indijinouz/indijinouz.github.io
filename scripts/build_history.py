@@ -7,6 +7,18 @@ from collections import defaultdict
 source = Path("bmi-royalty-statements")
 output = Path("bmi-royalty-history.html")
 
+# Exclude these columns from the generated HTML.
+# Original CSV files remain unchanged.
+
+excluded_columns = {
+    "ROYALTY AMOUNT",
+    "WITHHOLD",
+    "CURRENT ACTIVITY AMT",
+    "HITS SONG OR TV NET SUPER USAGE BONUS",
+    "STANDARDS OR TV NET THEME BONUS",
+    "FOREIGN SOCIETY ADJUSTMENT",
+}
+
 data = defaultdict(lambda: defaultdict(lambda: defaultdict(list)))
 all_headers = []
 total = 0
@@ -14,11 +26,19 @@ total = 0
 for file in sorted(source.glob("*.csv")):
     with file.open(encoding="utf-8-sig", newline="") as f:
         reader = csv.DictReader(f)
+
         if not reader.fieldnames:
             continue
 
+        # Include only permitted, non-empty column headers.
+
         for header in reader.fieldnames:
-            if header and header not in all_headers:
+            if (
+                header
+                and header.strip()
+                and header.strip().upper() not in excluded_columns
+                and header not in all_headers
+            ):
                 all_headers.append(header)
 
         for row in reader:
@@ -29,7 +49,17 @@ for file in sorted(source.glob("*.csv")):
             show = row.get("SHOW NAME") or "Unspecified"
             episode = row.get("EPISODE NAME") or "Unspecified"
 
-            data[country][show][episode].append(row)
+            # Remove excluded fields from the generated records.
+
+            clean_row = {
+                key: value
+                for key, value in row.items()
+                if key
+                and key.strip()
+                and key.strip().upper() not in excluded_columns
+            }
+
+            data[country][show][episode].append(clean_row)
             total += 1
 
 
@@ -76,8 +106,10 @@ for country, shows in sorted(data.items()):
 
             for row in rows:
                 parts.append('<tr>')
+
                 for header in all_headers:
                     parts.append(f'<td>{esc(row.get(header))}</td>')
+
                 parts.append('</tr>')
 
             parts.append('</tbody></table></div></details>')
