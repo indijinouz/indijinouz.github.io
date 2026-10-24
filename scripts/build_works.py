@@ -5,7 +5,7 @@ from pathlib import Path
 from collections import defaultdict
 
 source = Path("bmi-works-catalog/CatalogExport_1079244.csv")
-output = Path("bmi-works-history.html")
+output = Path("bmi-works-catalog.html")
 
 
 def esc(value):
