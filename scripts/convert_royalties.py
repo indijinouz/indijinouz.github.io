@@ -30,6 +30,8 @@ for csv_file in sorted(folder.glob("*.csv")):
 
     title = csv_file.stem
     headers = rows[0]
+    while headers and not headers[-1].strip():
+        headers.pop()
 
     table = ["<table>"]
     table.append("<thead><tr>")
