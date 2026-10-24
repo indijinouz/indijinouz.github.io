@@ -9,12 +9,16 @@ folder = Path("bmi-royalty-statements")
 # Columns excluded from public HTML pages.
 
 excluded_columns = {
+    "TIMING",
+    "PERF COUNT",
+    "BONUS LEVEL",
     "ROYALTY AMOUNT",
     "WITHHOLD",
     "CURRENT ACTIVITY AMT",
     "HITS SONG OR TV NET SUPER USAGE BONUS",
     "STANDARDS OR TV NET THEME BONUS",
     "FOREIGN SOCIETY ADJUSTMENT",
+    "PERF DATE",
 }
 
 # Generate an HTML table for every quarterly CSV.
