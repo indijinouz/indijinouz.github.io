@@ -63,6 +63,7 @@ tr:nth-child(even) {
 
 .accordion-page .sort-controls {
   display: flex;
+  justify-content: flex-end;
   gap: 20px;
   flex-wrap: wrap;
   margin-bottom: 28px;
