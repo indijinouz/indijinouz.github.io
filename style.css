@@ -228,7 +228,9 @@ tr:nth-child(even) {
 
 .accordion-page .catalog-search {
   display: flex;
+  flex-direction: row-reverse;
   align-items: center;
+  justify-content: space-between;
   gap: 16px;
   margin-bottom: 28px;
 }
