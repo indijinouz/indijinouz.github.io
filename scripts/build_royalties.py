@@ -11,16 +11,12 @@ output = Path("bmi-royalty-history.html")
 # Original CSV files remain unchanged.
 
 excluded_columns = {
-    "TIMING",
-    "PERF COUNT",
-    "BONUS LEVEL",
     "ROYALTY AMOUNT",
     "WITHHOLD",
     "CURRENT ACTIVITY AMT",
     "HITS SONG OR TV NET SUPER USAGE BONUS",
     "STANDARDS OR TV NET THEME BONUS",
     "FOREIGN SOCIETY ADJUSTMENT",
-    "PERF DATE",
 }
 
 data = defaultdict(lambda: defaultdict(lambda: defaultdict(list)))
