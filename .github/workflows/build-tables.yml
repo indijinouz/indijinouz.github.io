@@ -10,6 +10,7 @@ on:
       - 'scripts/convert_royalties.py'
       - 'scripts/convert_works.py'
       - 'scripts/build_royalties.py'
+      - 'scripts/build_works.py'
       - '.github/workflows/build-tables.yml'
   workflow_dispatch:
 
@@ -33,6 +34,9 @@ jobs:
       - name: Build BMI Royalty History
         run: python3 scripts/build_royalties.py
 
+      - name: Build BMI Works Catalog
+        run: python3 scripts/build_works.py
+
       - name: Save generated HTML pages
         run: |
           git config user.name "github-actions[bot]"
@@ -40,6 +44,7 @@ jobs:
           git add bmi-royalty-statements/
           git add bmi-works-catalog/
           git add bmi-royalty-history.html
+          git add bmi-works-history.html
           if ! git diff --cached --quiet; then
             git commit -m "Update BMI HTML tables"
             git push
