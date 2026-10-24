@@ -30,11 +30,11 @@ tr:nth-child(even) {
 
 
 /* =========================================
-   INTERACTIVE HISTORY PAGES
-   Royalty History and future Works History
+   ACCORDION PAGES
+   Shared styling for interactive data views
    ========================================= */
 
-.royalty-history {
+.accordion-page {
   max-width: 1200px;
   margin: 50px auto;
   padding: 0 24px;
@@ -43,37 +43,37 @@ tr:nth-child(even) {
   box-sizing: border-box;
 }
 
-.royalty-history *,
-.royalty-history *::before,
-.royalty-history *::after {
+.accordion-page *,
+.accordion-page *::before,
+.accordion-page *::after {
   box-sizing: border-box;
 }
 
-.royalty-history h1 {
+.accordion-page h1 {
   font-size: 30px;
   margin-bottom: 4px;
 }
 
-.royalty-history .subtitle {
+.accordion-page .subtitle {
   color: gray;
   margin-bottom: 24px;
 }
 
 /* Sorting controls */
 
-.royalty-history .sort-controls {
+.accordion-page .sort-controls {
   display: flex;
   gap: 20px;
   flex-wrap: wrap;
   margin-bottom: 28px;
 }
 
-.royalty-history .sort-controls label {
+.accordion-page .sort-controls label {
   font-size: 13px;
   color: #77808b;
 }
 
-.royalty-history .sort-controls select {
+.accordion-page .sort-controls select {
   margin-left: 7px;
   padding: 7px 10px;
   border: 1px solid #d5d9df;
@@ -86,11 +86,11 @@ tr:nth-child(even) {
 
 /* Collapsible sections */
 
-.royalty-history details {
+.accordion-page details {
   margin: 8px 0;
 }
 
-.royalty-history summary {
+.accordion-page summary {
   cursor: pointer;
   padding: 13px 16px;
   border-radius: 10px;
@@ -98,31 +98,31 @@ tr:nth-child(even) {
   font-weight: 500;
 }
 
-.royalty-history .country > summary {
+.accordion-page .country > summary {
   background: #e9edf2;
   color: #18212d;
   font-weight: 650;
 }
 
-.royalty-history .show {
+.accordion-page .show {
   margin-left: 22px;
 }
 
-.royalty-history .show > summary {
+.accordion-page .show > summary {
   background: #f2f4f7;
   color: #303846;
 }
 
-.royalty-history .episode {
+.accordion-page .episode {
   margin-left: 22px;
 }
 
-.royalty-history .episode > summary {
+.accordion-page .episode > summary {
   background: #f8f9fa;
   color: #414b59;
 }
 
-.royalty-history .count {
+.accordion-page .count {
   float: right;
   font-size: 12px;
   color: #77808b;
@@ -131,21 +131,21 @@ tr:nth-child(even) {
 
 /* Records table */
 
-.royalty-history .table-wrap {
+.accordion-page .table-wrap {
   overflow-x: auto;
   margin: 12px 0 20px 22px;
   border: 1px solid #ddd;
   border-radius: 10px;
 }
 
-.royalty-history table {
+.accordion-page table {
   border-collapse: collapse;
   width: 100%;
   font-size: 12px;
 }
 
-.royalty-history th,
-.royalty-history td {
+.accordion-page th,
+.accordion-page td {
   padding: 9px 12px;
   text-align: left;
   border: none;
@@ -153,12 +153,12 @@ tr:nth-child(even) {
   white-space: nowrap;
 }
 
-.royalty-history th {
+.accordion-page th {
   background: #f3f4f6;
   color: #333;
 }
 
-.royalty-history tr:nth-child(even) {
+.accordion-page tr:nth-child(even) {
   background: #fafafa;
 }
 
@@ -166,7 +166,7 @@ tr:nth-child(even) {
 
 @media (prefers-color-scheme: dark) {
 
-  .royalty-history {
+  .accordion-page {
     background: #16181c;
     color: #f1f2f4;
     color-scheme: dark;
@@ -174,26 +174,26 @@ tr:nth-child(even) {
 
   /* Extend dark background across entire viewport */
 
-  html:has(body.royalty-history) {
+  html:has(body.accordion-page) {
     background: #16181c;
   }
 
-  .royalty-history .country > summary {
+  .accordion-page .country > summary {
     background: #3a4452;
     color: #f1f2f4;
   }
 
-  .royalty-history .show > summary {
+  .accordion-page .show > summary {
     background: #2a3544;
     color: #eceef1;
   }
 
-  .royalty-history .episode > summary {
+  .accordion-page .episode > summary {
     background: #1a2433;
     color: #eceef1;
   }
 
-  .royalty-history .sort-controls select {
+  .accordion-page .sort-controls select {
     background: #292e36;
     border-color: #414650;
     color: #f1f2f4;
@@ -201,24 +201,24 @@ tr:nth-child(even) {
 
   /* Table colors coordinated with episode */
 
-  .royalty-history .table-wrap {
+  .accordion-page .table-wrap {
     background: #141e2d;
     border-color: #344355;
   }
 
-  .royalty-history th {
+  .accordion-page th {
     background: #29374a;
     color: #f0f3f8;
     border-bottom-color: #344355;
   }
 
-  .royalty-history td {
+  .accordion-page td {
     background: #141e2d;
     color: #f0f3f8;
     border-bottom-color: #344355;
   }
 
-  .royalty-history tr:nth-child(even) td {
+  .accordion-page tr:nth-child(even) td {
     background: #202c3d;
   }
 }
