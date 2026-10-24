@@ -76,17 +76,41 @@ for csv_file in sorted(folder.glob("*.csv")):
 
 print("HTML tables generated successfully.")
 
-# Generate the index page listing all quarters, newest first.
 
-links = []
+# Generate the index page with expandable year folders.
 
-for csv_file in sorted(folder.glob("*.csv"), reverse=True):
+from collections import defaultdict
+
+years = defaultdict(list)
+
+for csv_file in folder.glob("*.csv"):
     title = csv_file.stem
+    year = title.split()[0]
     filename = quote(f"{title}.html")
+    years[year].append((title, filename))
 
-    links.append(
-        f'<li><a href="{filename}">{html.escape(title)}</a></li>'
+directory = []
+
+for year in sorted(years, reverse=True):
+    directory.append(
+        f'<details class="year-folder">'
+        f'<summary>📁 {html.escape(year)}</summary>'
+        f'<div class="quarter-links">'
     )
+
+    quarters = sorted(years[year], reverse=True)
+
+    for i, (title, filename) in enumerate(quarters):
+        branch = "└──" if i == len(quarters) - 1 else "├──"
+
+        directory.append(
+            f'<div class="quarter-link">'
+            f'<span>{branch}</span> '
+            f'<a href="{filename}">{html.escape(title)}</a>'
+            f'</div>'
+        )
+
+    directory.append("</div></details>")
 
 index_page = f"""<!DOCTYPE html>
 <html lang="en">
@@ -99,9 +123,9 @@ index_page = f"""<!DOCTYPE html>
 <body>
 <h1>Michael Angelo Garcia (Indijinouz)</h1>
 <h2>BMI Royalty Statements</h2>
-<ul>
-{''.join(links)}
-</ul>
+<div class="statement-directory">
+{''.join(directory)}
+</div>
 </body>
 </html>"""
 
