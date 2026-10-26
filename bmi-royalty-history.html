@@ -13,6 +13,17 @@
 <h2>BMI Royalty History</h2>
 <p class="subtitle">97,058 records</p>
 
+<form class="catalog-search" id="royalty-search-form">
+  <input
+    type="search"
+    id="royalty-search"
+    placeholder="Search records, then press Enter..."
+    aria-label="Search Royalty History"
+    autocomplete="off"
+  >
+  <span id="search-count" aria-live="polite">Press Enter to search</span>
+</form>
+
 <div class="sort-controls">
   <label for="country-sort">
     Countries:
@@ -13841,8 +13852,13 @@ const renderBatchSize = 100;
 const countrySort = document.getElementById("country-sort");
 const showSort = document.getElementById("show-sort");
 const accordion = document.getElementById("royalty-accordion");
+const searchForm = document.getElementById("royalty-search-form");
+const searchInput = document.getElementById("royalty-search");
+const searchCount = document.getElementById("search-count");
 const chunkRequests = new Map();
 const renderStates = new WeakMap();
+let searchIndexRequest;
+let searchSequence = 0;
 
 function sortSections(parent, selector, mode) {
   const sections = Array.from(parent.children).filter(element =>
@@ -13871,6 +13887,91 @@ function updateSorting() {
 
 countrySort.addEventListener("change", updateSorting);
 showSort.addEventListener("change", updateSorting);
+
+function fetchSearchIndex() {
+  if (!searchIndexRequest) {
+    searchIndexRequest = fetch("bmi-royalty-history-data/search-index.json")
+      .then(response => {
+        if (!response.ok) {
+          throw new Error(`HTTP ${response.status} while loading the search index`);
+        }
+        return response.json();
+      })
+      .catch(error => {
+        searchIndexRequest = undefined;
+        throw error;
+      });
+  }
+  return searchIndexRequest;
+}
+
+function showAllSections() {
+  accordion.querySelectorAll("details.country, details.show, details.episode")
+    .forEach(section => { section.hidden = false; });
+}
+
+function filterHierarchy(matches) {
+  const episodes = accordion.querySelectorAll("details.episode");
+  episodes.forEach(episode => {
+    episode.hidden = !matches.has(episode.dataset.episodeId);
+  });
+
+  accordion.querySelectorAll("details.show").forEach(show => {
+    const hasMatch = Array.from(show.children).some(child =>
+      child.matches("details.episode") && !child.hidden
+    );
+    show.hidden = !hasMatch;
+  });
+
+  accordion.querySelectorAll("details.country").forEach(country => {
+    const hasMatch = Array.from(country.children).some(child =>
+      child.matches("details.show") && !child.hidden
+    );
+    country.hidden = !hasMatch;
+  });
+}
+
+searchForm.addEventListener("submit", async event => {
+  event.preventDefault();
+  const query = searchInput.value.trim().toLowerCase();
+  const requestNumber = ++searchSequence;
+
+  if (!query) {
+    showAllSections();
+    searchCount.textContent = "Press Enter to search";
+    return;
+  }
+
+  const terms = query.split(/\s+/).filter(Boolean);
+  searchCount.textContent = "Searching…";
+
+  try {
+    const searchIndex = await fetchSearchIndex();
+    if (requestNumber !== searchSequence) return;
+
+    const matches = new Set();
+    Object.entries(searchIndex).forEach(([episodeId, text]) => {
+      if (terms.every(term => text.includes(term))) matches.add(episodeId);
+    });
+
+    filterHierarchy(matches);
+    searchCount.textContent =
+      matches.size.toLocaleString() +
+      (matches.size === 1 ? " matching episode" : " matching episodes");
+  } catch (error) {
+    if (requestNumber !== searchSequence) return;
+    searchCount.textContent = "Search could not be loaded. Press Enter to retry.";
+    console.error(error);
+  }
+});
+
+searchInput.addEventListener("keydown", event => {
+  if (event.key !== "Escape") return;
+  searchInput.value = "";
+  searchSequence += 1;
+  showAllSections();
+  searchCount.textContent = "Press Enter to search";
+});
 
 function fetchChunk(url) {
   if (!chunkRequests.has(url)) {
