@@ -1,16 +1,3 @@
-#!/usr/bin/env python3
-"""Build the BMI royalty history page for GitHub Pages.
-
-Run this script from anywhere. It reads the repository's
-``bmi-royalty-statements/*.csv`` files and writes:
-
-* ``bmi-royalty-history.html`` — the royalty history page.
-* ``bmi-royalty-history-data/chunk-*.json`` — the royalty records.
-* ``bmi-royalty-history-data/search-index.json`` — the search index.
-"""
-
-from __future__ import annotations
-
 import csv
 import html
 import io
