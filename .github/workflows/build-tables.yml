@@ -1,4 +1,3 @@
-
 name: Build BMI HTML Tables
 
 on:
@@ -11,6 +10,7 @@ on:
       - 'scripts/convert_royalties.py'
       - 'scripts/convert_works.py'
       - 'scripts/build_royalties.py'
+      - 'scripts/build_royalties2.py'
       - 'scripts/build_works.py'
       - 'scripts/build_sitemap.py'
       - '.github/workflows/build-tables.yml'
@@ -36,22 +36,27 @@ jobs:
       - name: Build BMI Royalty History
         run: python3 scripts/build_royalties.py
 
+      - name: Build lazy-loading BMI Royalty History
+        run: python3 scripts/build_royalties2.py
+
       - name: Build BMI Works Catalog
         run: python3 scripts/build_works.py
 
       - name: Build sitemap
         run: python3 scripts/build_sitemap.py
 
-      - name: Save generated HTML pages and sitemap
+      - name: Save generated HTML pages, JSON data, and sitemap
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add bmi-royalty-statements/
           git add bmi-works-catalog/
           git add bmi-royalty-history.html
+          git add bmi-royalty-history-2.html
+          git add -A bmi-royalty-history-2-data/
           git add bmi-works-catalog.html
           git add sitemap.xml
           if ! git diff --cached --quiet; then
-            git commit -m "Update BMI HTML tables and sitemap"
+            git commit -m "Update BMI HTML tables, JSON data, and sitemap"
             git push
           fi
