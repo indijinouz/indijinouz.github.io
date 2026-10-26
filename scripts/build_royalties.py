@@ -300,7 +300,7 @@ def build_page(headers: List[str], sections: str, total: int) -> str:
   <input
     type="search"
     id="royalty-search"
-    placeholder="Search records, then press Enter..."
+    placeholder="Search titles, shows, episodes..."
     aria-label="Search Royalty History"
     autocomplete="off"
   >
