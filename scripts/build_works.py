@@ -1,15 +1,3 @@
-#!/usr/bin/env python3
-"""Build the BMI Works Catalog page for GitHub Pages.
-
-This script reads:
-
-* ``bmi-works-catalog/CatalogExport_1079244.csv``
-
-and writes:
-
-* ``bmi-works-catalog.html``
-"""
-
 import csv
 import html
 from pathlib import Path
