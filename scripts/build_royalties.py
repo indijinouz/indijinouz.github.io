@@ -6,6 +6,7 @@ Run this script from anywhere. It reads the repository's
 
 * ``bmi-royalty-history.html`` — the royalty history page.
 * ``bmi-royalty-history-data/chunk-*.json`` — the royalty records.
+* ``bmi-royalty-history-data/search-index.json`` — the search index.
 """
 
 from __future__ import annotations
@@ -186,6 +187,42 @@ def write_chunks(
     return locations
 
 
+def write_search_index(
+    episodes: List[EpisodeData],
+    headers: List[str],
+    locations: Mapping[EpisodeKey, Tuple[str, str]],
+) -> None:
+    """Write one compact searchable entry for each episode."""
+
+    search_index: Dict[str, str] = {}
+
+    for country, show, episode, rows in episodes:
+        episode_id = locations[(country, show, episode)][1]
+        values: List[str] = []
+        known_values = set()
+
+        def add_value(value: object) -> None:
+            normalized = " ".join(str(value or "").lower().split())
+            if normalized and normalized not in known_values:
+                known_values.add(normalized)
+                values.append(normalized)
+
+        add_value(country)
+        add_value(show)
+        add_value(episode)
+
+        for row in rows:
+            for header in headers:
+                add_value(row.get(header))
+
+        search_index[episode_id] = "\n".join(values)
+
+    (DATA_DIRECTORY / "search-index.json").write_text(
+        json.dumps(search_index, ensure_ascii=False, separators=(",", ":")),
+        encoding="utf-8",
+    )
+
+
 def html_sections(
     data: Mapping[str, object],
     locations: Mapping[EpisodeKey, Tuple[str, str]],
@@ -259,6 +296,17 @@ def build_page(headers: List[str], sections: str, total: int) -> str:
 <h2>BMI Royalty History</h2>
 <p class="subtitle">RECORD_COUNT records</p>
 
+<form class="catalog-search" id="royalty-search-form">
+  <input
+    type="search"
+    id="royalty-search"
+    placeholder="Search records, then press Enter..."
+    aria-label="Search Royalty History"
+    autocomplete="off"
+  >
+  <span id="search-count" aria-live="polite">Press Enter to search</span>
+</form>
+
 <div class="sort-controls">
   <label for="country-sort">
     Countries:
@@ -287,8 +335,13 @@ const renderBatchSize = RENDER_BATCH_SIZE;
 const countrySort = document.getElementById("country-sort");
 const showSort = document.getElementById("show-sort");
 const accordion = document.getElementById("royalty-accordion");
+const searchForm = document.getElementById("royalty-search-form");
+const searchInput = document.getElementById("royalty-search");
+const searchCount = document.getElementById("search-count");
 const chunkRequests = new Map();
 const renderStates = new WeakMap();
+let searchIndexRequest;
+let searchSequence = 0;
 
 function sortSections(parent, selector, mode) {
   const sections = Array.from(parent.children).filter(element =>
@@ -317,6 +370,91 @@ function updateSorting() {
 
 countrySort.addEventListener("change", updateSorting);
 showSort.addEventListener("change", updateSorting);
+
+function fetchSearchIndex() {
+  if (!searchIndexRequest) {
+    searchIndexRequest = fetch("bmi-royalty-history-data/search-index.json")
+      .then(response => {
+        if (!response.ok) {
+          throw new Error(`HTTP ${response.status} while loading the search index`);
+        }
+        return response.json();
+      })
+      .catch(error => {
+        searchIndexRequest = undefined;
+        throw error;
+      });
+  }
+  return searchIndexRequest;
+}
+
+function showAllSections() {
+  accordion.querySelectorAll("details.country, details.show, details.episode")
+    .forEach(section => { section.hidden = false; });
+}
+
+function filterHierarchy(matches) {
+  const episodes = accordion.querySelectorAll("details.episode");
+  episodes.forEach(episode => {
+    episode.hidden = !matches.has(episode.dataset.episodeId);
+  });
+
+  accordion.querySelectorAll("details.show").forEach(show => {
+    const hasMatch = Array.from(show.children).some(child =>
+      child.matches("details.episode") && !child.hidden
+    );
+    show.hidden = !hasMatch;
+  });
+
+  accordion.querySelectorAll("details.country").forEach(country => {
+    const hasMatch = Array.from(country.children).some(child =>
+      child.matches("details.show") && !child.hidden
+    );
+    country.hidden = !hasMatch;
+  });
+}
+
+searchForm.addEventListener("submit", async event => {
+  event.preventDefault();
+  const query = searchInput.value.trim().toLowerCase();
+  const requestNumber = ++searchSequence;
+
+  if (!query) {
+    showAllSections();
+    searchCount.textContent = "Press Enter to search";
+    return;
+  }
+
+  const terms = query.split(/\s+/).filter(Boolean);
+  searchCount.textContent = "Searching…";
+
+  try {
+    const searchIndex = await fetchSearchIndex();
+    if (requestNumber !== searchSequence) return;
+
+    const matches = new Set();
+    Object.entries(searchIndex).forEach(([episodeId, text]) => {
+      if (terms.every(term => text.includes(term))) matches.add(episodeId);
+    });
+
+    filterHierarchy(matches);
+    searchCount.textContent =
+      matches.size.toLocaleString() +
+      (matches.size === 1 ? " matching episode" : " matching episodes");
+  } catch (error) {
+    if (requestNumber !== searchSequence) return;
+    searchCount.textContent = "Search could not be loaded. Press Enter to retry.";
+    console.error(error);
+  }
+});
+
+searchInput.addEventListener("keydown", event => {
+  if (event.key !== "Escape") return;
+  searchInput.value = "";
+  searchSequence += 1;
+  showAllSections();
+  searchCount.textContent = "Press Enter to search";
+});
 
 function fetchChunk(url) {
   if (!chunkRequests.has(url)) {
@@ -449,6 +587,7 @@ def main() -> None:
     headers, data, total = read_source()
     episodes = list(sorted_hierarchy(data))
     locations = write_chunks(episodes, headers)
+    write_search_index(episodes, headers, locations)
     sections = html_sections(data, locations)
     OUTPUT.write_text(build_page(headers, sections, total), encoding="utf-8")
 
