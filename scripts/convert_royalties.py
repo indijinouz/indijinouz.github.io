@@ -1,4 +1,3 @@
-
 import csv
 import html
 from pathlib import Path
