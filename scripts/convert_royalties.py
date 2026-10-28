@@ -75,38 +75,19 @@ for csv_file in sorted(folder.glob("*.csv")):
 print("HTML tables generated successfully.")
 
 
+# Generate a plain list of quarterly statements.
 
-# Generate the statement directory, grouped by year.
+statement_links = []
 
-from collections import defaultdict
-
-years = defaultdict(list)
-
-for csv_file in folder.glob("*.csv"):
+for csv_file in sorted(folder.glob("*.csv"), reverse=True):
     title = csv_file.stem
-    year = title.split()[0]
     filename = quote(f"{title}.html")
-    years[year].append((title, filename))
 
-directory = []
-
-for year in sorted(years, reverse=True):
-    quarters = sorted(years[year], reverse=True)
-
-    directory.append(
-        f'<div class="folder">📁 {html.escape(year)}'
-        f'<div class="folder-links">'
+    statement_links.append(
+        f'<li><a href="{filename}">{html.escape(title)}</a></li>'
     )
 
-    for i, (title, filename) in enumerate(quarters):
-        branch = "└──" if i == len(quarters) - 1 else "├──"
-
-        directory.append(
-            f'<div>{branch} '
-            f'<a href="{filename}">{html.escape(title)}</a></div>'
-        )
-
-    directory.append("</div></div>")
+statement_list = "\n".join(statement_links)
 
 index_page = f"""<!DOCTYPE html>
 <html lang="en">
@@ -118,9 +99,9 @@ index_page = f"""<!DOCTYPE html>
 <body>
 <h1>Michael Angelo Garcia (Indijinouz)</h1>
 <h2>BMI Royalty Statements</h2>
-<div class="directory">
-{''.join(directory)}
-</div>
+<ul>
+{statement_list}
+</ul>
 </body>
 </html>"""
 
