@@ -1,11 +1,64 @@
 /* =========================================
+   COLOR SYSTEM
+   ========================================= */
+
+:root {
+  --page-start: #100829;
+  --page-middle: #101633;
+  --page-blue: #0c2441;
+  --page-end: #083348;
+
+  --violet: #9661ff;
+  --purple-link: #c89cff;
+  --blue: #4e9cff;
+  --cyan: #42d8e5;
+  --cyan-light: #5edcea;
+  --lime: #7bdc65;
+
+  --text-primary: #f7f8ff;
+  --text-secondary: #d9dcef;
+  --text-muted: #aeb3d0;
+
+  --control-border: #3f6b8f;
+  --table-border: #315675;
+}
+
+
+/* =========================================
+   SHARED PAGE BACKGROUND
+   Only applies to the homepage and accordion
+   pages. Source pages remain unstyled.
+   ========================================= */
+
+html:has(.site-navigation),
+html:has(body.accordion-page) {
+  min-height: 100%;
+  color-scheme: dark;
+  background:
+    radial-gradient(
+      circle at 10% 25%,
+      rgba(123, 31, 255, 0.22),
+      transparent 38%
+    ),
+    radial-gradient(
+      circle at 90% 80%,
+      rgba(18, 200, 223, 0.18),
+      transparent 42%
+    ),
+    linear-gradient(
+      145deg,
+      var(--page-start) 0%,
+      var(--page-middle) 38%,
+      var(--page-blue) 72%,
+      var(--page-end) 100%
+    );
+}
+
+
+/* =========================================
    GLOBAL STYLING
    Homepage
    ========================================= */
-
-html:has(.site-navigation) {
-  background: #f6f7f9;
-}
 
 body:has(.site-navigation) {
   max-width: 760px;
@@ -13,15 +66,21 @@ body:has(.site-navigation) {
   margin: 0 auto;
   padding: 56px 24px;
   box-sizing: border-box;
-  color: #17191d;
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  background: transparent;
+  color: var(--text-primary);
+  font-family:
+    -apple-system,
+    BlinkMacSystemFont,
+    "Segoe UI",
+    sans-serif;
   line-height: 1.5;
 }
 
 body:has(.site-navigation) h1 {
   margin: 0;
+  color: var(--text-primary);
   font-size: 36px;
-  font-weight: 500;
+  font-weight: 600;
   letter-spacing: -0.025em;
 }
 
@@ -37,80 +96,75 @@ body:has(.site-navigation) h1 {
   justify-content: space-between;
   min-height: 66px;
   padding: 0 22px;
+  border: 1px solid rgba(164, 171, 222, 0.16);
   border-radius: 13px;
-  background: #ffffff;
-  color: inherit;
+  background:
+    linear-gradient(
+      115deg,
+      rgba(93, 44, 168, 0.55),
+      rgba(24, 65, 126, 0.55)
+    );
+  color: var(--text-primary);
   font-size: 17px;
   font-weight: 500;
   text-decoration: none;
+  box-shadow:
+    0 10px 30px rgba(0, 0, 0, 0.15),
+    inset 0 1px 0 rgba(255, 255, 255, 0.04);
   transition:
-    background-color 160ms ease,
+    background 160ms ease,
+    border-color 160ms ease,
     transform 160ms ease;
+}
+
+.site-navigation a:visited {
+  color: var(--text-primary);
 }
 
 .site-navigation a::after {
   content: "→";
-  color: #626a75;
-  font-size: 18px;
+  color: var(--cyan-light);
+  font-size: 19px;
   font-weight: 400;
 }
 
 .site-navigation a:hover {
-  background: #eef1f5;
+  border-color: rgba(94, 220, 234, 0.4);
+  background:
+    linear-gradient(
+      115deg,
+      rgba(117, 54, 202, 0.72),
+      rgba(28, 91, 151, 0.72)
+    );
   transform: translateY(-1px);
 }
 
-@media (prefers-color-scheme: dark) {
-  html:has(.site-navigation) {
-    background: #16181c;
-  }
-
-  body:has(.site-navigation) {
-    color: #f1f2f4;
-    color-scheme: dark;
-  }
-
-  .site-navigation a {
-    background: #22262d;
-  }
-
-  .site-navigation a::after {
-    color: #aab0ba;
-  }
-
-  .site-navigation a:hover {
-    background: #2b313a;
-  }
+.site-navigation a:focus-visible {
+  outline: 2px solid var(--lime);
+  outline-offset: 3px;
 }
 
-@media (max-width: 520px) {
-  body:has(.site-navigation) {
-    padding: 36px 20px;
-  }
-
-  body:has(.site-navigation) h1 {
-    font-size: 29px;
-  }
-
-  .site-navigation a {
-    min-height: 62px;
-    padding: 0 17px;
-    font-size: 16px;
-  }
-}
 
 /* =========================================
    ACCORDION PAGES
-   Shared styling for interactive data views
+   Shared layout
    ========================================= */
 
 .accordion-page {
   max-width: 1200px;
-  margin: 50px auto;
-  padding: 0 24px;
-  line-height: 1.5;
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  min-height: 100vh;
+  margin: 0 auto;
+  padding: 50px 24px;
   box-sizing: border-box;
+  background: transparent;
+  color: var(--text-primary);
+  color-scheme: dark;
+  font-family:
+    -apple-system,
+    BlinkMacSystemFont,
+    "Segoe UI",
+    sans-serif;
+  line-height: 1.5;
 }
 
 .accordion-page *,
@@ -120,192 +174,37 @@ body:has(.site-navigation) h1 {
 }
 
 .accordion-page h1 {
-  font-size: 30px;
+  margin-top: 0;
   margin-bottom: 4px;
+  color: var(--text-primary);
+  font-size: 30px;
 }
 
 .accordion-page h2 {
-  color: #E6BE78;
+  margin-top: 18px;
+  margin-bottom: 8px;
+  color: #d8b7ff;
+  background:
+    linear-gradient(
+      90deg,
+      #d8b7ff,
+      #83aaff,
+      var(--cyan-light)
+    );
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
 }
 
 .accordion-page .subtitle {
-  color: gray;
   margin-bottom: 24px;
+  color: var(--text-muted);
 }
 
-.accordion-page .accordion-footer {
-  padding-top: 24px;
-  color: #77808b;
-  font-size: 14px;
-  text-align: right;
-}
 
-/* Sorting controls */
-
-.accordion-page .sort-controls {
-  display: flex;
-  justify-content: flex-end;
-  gap: 20px;
-  flex-wrap: wrap;
-  margin-bottom: 28px;
-}
-
-.accordion-page .sort-controls label {
-  font-size: 13px;
-  color: #77808b;
-}
-
-.accordion-page .sort-controls select {
-  margin-left: 7px;
-  padding: 7px 10px;
-  border: 1px solid #d5d9df;
-  border-radius: 8px;
-  background: #f8f9fa;
-  color: #303846;
-  font: inherit;
-  cursor: pointer;
-}
-
-/* Collapsible sections */
-
-.accordion-page details {
-  margin: 8px 0;
-}
-
-.accordion-page summary {
-  cursor: pointer;
-  padding: 13px 16px;
-  border-radius: 10px;
-  display: list-item;
-  font-weight: 500;
-}
-
-.accordion-page .country > summary {
-  background: #e9edf2;
-  color: #18212d;
-  font-weight: 650;
-}
-
-.accordion-page .show {
-  margin-left: 22px;
-}
-
-.accordion-page .show > summary {
-  background: #f2f4f7;
-  color: #303846;
-}
-
-.accordion-page .episode {
-  margin-left: 22px;
-}
-
-.accordion-page .episode > summary {
-  background: #f8f9fa;
-  color: #414b59;
-}
-
-.accordion-page .count {
-  float: right;
-  font-size: 12px;
-  color: #77808b;
-  font-weight: 400;
-}
-
-/* Records table */
-
-.accordion-page .table-wrap {
-  overflow-x: auto;
-  margin: 12px 0 20px 22px;
-  border: 1px solid #ddd;
-  border-radius: 10px;
-}
-
-.accordion-page table {
-  border-collapse: collapse;
-  width: 100%;
-  font-size: 12px;
-}
-
-.accordion-page th,
-.accordion-page td {
-  padding: 9px 12px;
-  text-align: left;
-  border: none;
-  border-bottom: 1px solid #e5e7eb;
-  white-space: nowrap;
-}
-
-.accordion-page th {
-  background: #f3f4f6;
-  color: #333;
-}
-
-.accordion-page tr:nth-child(even) {
-  background: #fafafa;
-}
-
-/* Dark mode */
-
-@media (prefers-color-scheme: dark) {
-
-  .accordion-page {
-    background: #16181c;
-    color: #f1f2f4;
-    color-scheme: dark;
-  }
-
-  /* Extend dark background across entire viewport */
-
-  html:has(body.accordion-page) {
-    background: #16181c;
-  }
-
-  .accordion-page .country > summary {
-    background: #3a4452;
-    color: #f1f2f4;
-  }
-
-  .accordion-page .show > summary {
-    background: #2a3544;
-    color: #eceef1;
-  }
-
-  .accordion-page .episode > summary {
-    background: #1a2433;
-    color: #eceef1;
-  }
-
-  .accordion-page .sort-controls select {
-    background: #292e36;
-    border-color: #414650;
-    color: #f1f2f4;
-  }
-
-  /* Table colors coordinated with episode */
-
-  .accordion-page .table-wrap {
-    background: #141e2d;
-    border-color: #344355;
-  }
-
-  .accordion-page th {
-    background: #29374a;
-    color: #f0f3f8;
-    border-bottom-color: #344355;
-  }
-
-  .accordion-page td {
-    background: #141e2d;
-    color: #f0f3f8;
-    border-bottom-color: #344355;
-  }
-
-  .accordion-page tr:nth-child(even) td {
-    background: #202c3d;
-  }
-}
-
-/* Accordion search */
+/* =========================================
+   ACCORDION SEARCH
+   ========================================= */
 
 .accordion-page .accordion-search {
   display: flex;
@@ -320,213 +219,408 @@ body:has(.site-navigation) h1 {
   flex: 0 1 300px;
   min-width: 0;
   padding: 12px 16px;
-  border: 1px solid #d5d9df;
+  border: 1px solid var(--control-border);
   border-radius: 10px;
+  background:
+    linear-gradient(
+      115deg,
+      rgba(32, 34, 83, 0.96),
+      rgba(18, 70, 94, 0.96)
+    );
+  color: var(--text-primary);
   font: inherit;
   font-size: 14px;
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.06),
+    0 6px 18px rgba(0, 0, 0, 0.12);
+  transition:
+    border-color 150ms ease,
+    outline-color 150ms ease;
+}
+
+.accordion-page .accordion-search input::placeholder {
+  color: var(--text-muted);
+  opacity: 1;
+}
+
+.accordion-page .accordion-search input:hover {
+  border-color: var(--blue);
+}
+
+.accordion-page .accordion-search input:focus {
+  border-color: var(--cyan);
+  outline: 2px solid rgba(66, 216, 229, 0.3);
+  outline-offset: 2px;
 }
 
 .accordion-page #search-count {
-  color: #77808b;
+  color: var(--text-muted);
   font-size: 12px;
   white-space: nowrap;
 }
 
-/* Keep nonmatching compositions hidden */
+
+/* =========================================
+   SORTING CONTROLS
+   ========================================= */
+
+.accordion-page .sort-controls {
+  display: flex;
+  justify-content: flex-end;
+  gap: 20px;
+  flex-wrap: wrap;
+  margin-bottom: 28px;
+}
+
+.accordion-page .sort-controls label {
+  color: var(--text-muted);
+  font-size: 13px;
+}
+
+.accordion-page .sort-controls select {
+  margin-left: 7px;
+  padding: 7px 10px;
+  border: 1px solid var(--control-border);
+  border-radius: 8px;
+  background:
+    linear-gradient(
+      115deg,
+      rgba(32, 34, 83, 0.96),
+      rgba(18, 70, 94, 0.96)
+    );
+  color: var(--text-primary);
+  color-scheme: dark;
+  font: inherit;
+  cursor: pointer;
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.06),
+    0 6px 18px rgba(0, 0, 0, 0.12);
+}
+
+.accordion-page .sort-controls select:hover {
+  border-color: var(--blue);
+}
+
+.accordion-page .sort-controls select:focus {
+  border-color: var(--cyan);
+  outline: 2px solid rgba(66, 216, 229, 0.3);
+  outline-offset: 2px;
+}
+
+.accordion-page .sort-controls select option {
+  background: #17233b;
+  color: var(--text-primary);
+}
+
+
+/* =========================================
+   ACCORDION LEVELS
+   ========================================= */
+
+.accordion-page details {
+  margin: 8px 0;
+}
+
+.accordion-page summary {
+  display: list-item;
+  padding: 13px 16px;
+  border-radius: 10px;
+  color: var(--text-primary);
+  font-weight: 500;
+  cursor: pointer;
+  box-shadow:
+    0 8px 20px rgba(0, 0, 0, 0.12),
+    inset 0 1px 0 rgba(255, 255, 255, 0.04);
+}
+
+.accordion-page summary:focus-visible {
+  outline: 2px solid var(--lime);
+  outline-offset: 3px;
+}
+
+
+/* Country level */
+
+.accordion-page .country > summary {
+  border-left: 3px solid var(--violet);
+  background:
+    linear-gradient(
+      100deg,
+      #4d287e,
+      #2a427c
+    );
+  color: var(--text-primary);
+  font-weight: 650;
+}
+
+.accordion-page .country > summary::marker {
+  color: #d8b7ff;
+}
+
+
+/* Show level */
+
+.accordion-page .show {
+  margin-left: 22px;
+}
+
+.accordion-page .show > summary {
+  border-left: 3px solid var(--blue);
+  background:
+    linear-gradient(
+      100deg,
+      #243c70,
+      #185678
+    );
+  color: var(--text-primary);
+}
+
+.accordion-page .show > summary::marker {
+  color: #83aaff;
+}
+
+
+/* Episode level */
+
+.accordion-page .episode {
+  margin-left: 22px;
+}
+
+.accordion-page .episode > summary {
+  border-left: 3px solid var(--cyan);
+  background:
+    linear-gradient(
+      100deg,
+      #163c5a,
+      #125368
+    );
+  color: var(--text-primary);
+}
+
+.accordion-page .episode > summary::marker {
+  color: var(--cyan-light);
+}
+
+
+/* Counts */
+
+.accordion-page .count {
+  float: right;
+  color: #b8bed9;
+  font-size: 12px;
+  font-weight: 400;
+}
+
+
+/* =========================================
+   FOURTH LEVEL
+   RECORDS TABLE
+   ========================================= */
+
+.accordion-page .table-wrap {
+  overflow-x: auto;
+  margin: 12px 0 20px 22px;
+  border: 1px solid var(--table-border);
+  border-radius: 10px;
+  background: #0e2238;
+  box-shadow:
+    0 14px 32px rgba(0, 0, 0, 0.2),
+    inset 0 1px 0 rgba(255, 255, 255, 0.04);
+}
+
+.accordion-page table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 12px;
+}
+
+.accordion-page th,
+.accordion-page td {
+  padding: 9px 12px;
+  border: none;
+  border-bottom: 1px solid #294c69;
+  text-align: left;
+  white-space: nowrap;
+}
+
+.accordion-page th {
+  border-bottom-color: #456b91;
+  background:
+    linear-gradient(
+      100deg,
+      #35286f,
+      #224779,
+      #176078
+    );
+  color: var(--text-primary);
+  font-weight: 650;
+}
+
+.accordion-page td {
+  background: rgba(10, 29, 50, 0.96);
+  color: #f0f3ff;
+}
+
+.accordion-page tr:nth-child(even) td {
+  background: rgba(19, 50, 77, 0.96);
+}
+
+.accordion-page tbody tr:hover td {
+  background: rgba(35, 65, 103, 0.98);
+}
+
+.accordion-page .episode-records > p {
+  margin-left: 22px;
+  color: var(--text-muted);
+}
+
+
+/* Table scrollbar */
+
+.accordion-page .table-wrap {
+  scrollbar-color: #3b7192 #11263c;
+}
+
+.accordion-page .table-wrap::-webkit-scrollbar {
+  height: 10px;
+}
+
+.accordion-page .table-wrap::-webkit-scrollbar-track {
+  background: #11263c;
+}
+
+.accordion-page .table-wrap::-webkit-scrollbar-thumb {
+  border: 2px solid #11263c;
+  border-radius: 999px;
+  background:
+    linear-gradient(
+      90deg,
+      #7551c5,
+      #338fb0
+    );
+}
+
+
+/* =========================================
+   FOOTER AND LINKS
+   ========================================= */
+
+.accordion-page .accordion-footer {
+  padding-top: 24px;
+  color: var(--text-muted);
+  font-size: 14px;
+  text-align: right;
+}
+
+.accordion-page a,
+.accordion-page a:visited {
+  color: var(--purple-link);
+}
+
+.accordion-page a:hover {
+  color: var(--cyan-light);
+}
+
+.accordion-page a:focus-visible {
+  outline: 2px solid var(--lime);
+  outline-offset: 3px;
+}
+
+
+/* =========================================
+   SEARCH VISIBILITY
+   ========================================= */
 
 .accordion-page details.work[hidden] {
   display: none;
 }
 
-@media (prefers-color-scheme: dark) {
-  .accordion-page .accordion-search input {
-    background: #292e36;
-    border-color: #414650;
-    color: #f1f2f4;
+
+/* =========================================
+   RESPONSIVE LAYOUT
+   ========================================= */
+
+@media (max-width: 700px) {
+
+  body:has(.site-navigation) {
+    padding: 36px 20px;
   }
 
-  .accordion-page .accordion-search input::placeholder {
-    color: #9099a6;
+  body:has(.site-navigation) h1 {
+    font-size: 29px;
+  }
+
+  .site-navigation a {
+    min-height: 62px;
+    padding: 0 17px;
+    font-size: 16px;
+  }
+
+  .accordion-page {
+    padding: 36px 16px;
+  }
+
+  .accordion-page h1 {
+    font-size: 26px;
+  }
+
+  .accordion-page .accordion-search {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .accordion-page .accordion-search input {
+    flex-basis: auto;
+    width: 100%;
+  }
+
+  .accordion-page #search-count {
+    white-space: normal;
+  }
+
+  .accordion-page .sort-controls {
+    justify-content: flex-start;
+    gap: 12px;
+  }
+
+  .accordion-page .sort-controls label {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+  }
+
+  .accordion-page .show {
+    margin-left: 12px;
+  }
+
+  .accordion-page .episode {
+    margin-left: 12px;
+  }
+
+  .accordion-page .count {
+    float: none;
+    display: block;
+    margin-top: 3px;
+  }
+
+  .accordion-page .table-wrap {
+    margin-left: 0;
   }
 }
 
+
 /* =========================================
-   PURPLE / BLUE / CYAN GRADIENT THEME
+   REDUCED MOTION
    ========================================= */
 
-@media (prefers-color-scheme: dark) {
-
-  /* Shared page background */
-
-  html:has(.site-navigation),
-  html:has(body.accordion-page) {
-    background:
-      radial-gradient(
-        circle at 10% 25%,
-        rgba(123, 31, 255, 0.22),
-        transparent 38%
-      ),
-      radial-gradient(
-        circle at 90% 80%,
-        rgba(18, 200, 223, 0.18),
-        transparent 42%
-      ),
-      linear-gradient(
-        145deg,
-        #100829 0%,
-        #101633 38%,
-        #0c2441 72%,
-        #083348 100%
-      );
-    background-attachment: fixed;
-  }
-
-  body:has(.site-navigation),
-  .accordion-page {
-    background: transparent;
-    color: #f7f8ff;
-  }
-
-  /* Homepage */
+@media (prefers-reduced-motion: reduce) {
 
   .site-navigation a {
-    border: 1px solid rgba(164, 171, 222, 0.16);
-    background:
-      linear-gradient(
-        115deg,
-        rgba(93, 44, 168, 0.55),
-        rgba(24, 65, 126, 0.55)
-      );
-    color: #f7f8ff;
-  }
-
-  .site-navigation a::after {
-    color: #5edcea;
+    transition: none;
   }
 
   .site-navigation a:hover {
-    background:
-      linear-gradient(
-        115deg,
-        rgba(117, 54, 202, 0.7),
-        rgba(28, 91, 151, 0.7)
-      );
-  }
-
-  .site-navigation a:focus-visible {
-    outline: 2px solid #7bdc65;
-    outline-offset: 3px;
-  }
-
-  /* Page title */
-
-  .accordion-page h2 {
-    background: linear-gradient(
-      90deg,
-      #d8b7ff,
-      #83aaff,
-      #5edcea
-    );
-    background-clip: text;
-    -webkit-background-clip: text;
-    color: transparent;
-  }
-
-  .accordion-page .subtitle,
-  .accordion-page .count,
-  .accordion-page #search-count,
-  .accordion-page .sort-controls label,
-  .accordion-page .accordion-footer {
-    color: #aeb3d0;
-  }
-
-  /* Accordion levels */
-
-  .accordion-page .country > summary {
-    border-left: 3px solid #9661ff;
-    background: linear-gradient(
-      100deg,
-      #4d287e,
-      #2a427c
-    );
-    color: #f7f8ff;
-  }
-
-  .accordion-page .show > summary {
-    border-left: 3px solid #4e9cff;
-    background: linear-gradient(
-      100deg,
-      #243c70,
-      #185678
-    );
-    color: #f7f8ff;
-  }
-
-  .accordion-page .episode > summary {
-    border-left: 3px solid #42d8e5;
-    background: linear-gradient(
-      100deg,
-      #163c5a,
-      #125368
-    );
-    color: #f7f8ff;
-  }
-
-  .accordion-page summary:focus-visible {
-    outline: 2px solid #7bdc65;
-    outline-offset: 3px;
-  }
-
-  /* Search and sorting controls */
-
-  .accordion-page .accordion-search input,
-  .accordion-page .sort-controls select {
-    border-color: #344a6d;
-    background: #17233b;
-    color: #f7f8ff;
-  }
-
-  .accordion-page .accordion-search input::placeholder {
-    color: #9ba3c0;
-  }
-
-  .accordion-page .accordion-search input:focus,
-  .accordion-page .sort-controls select:focus {
-    border-color: #42d8e5;
-    outline: 2px solid rgba(66, 216, 229, 0.28);
-  }
-
-  /* Tables */
-
-  .accordion-page .table-wrap {
-    border-color: #294c69;
-    background: #0e2238;
-  }
-
-  .accordion-page th {
-    border-bottom-color: #315675;
-    background: #213d61;
-    color: #f4f6ff;
-  }
-
-  .accordion-page td {
-    border-bottom-color: #294c69;
-    background: #0e2238;
-    color: #f0f3ff;
-  }
-
-  .accordion-page tr:nth-child(even) td {
-    background: #172e49;
-  }
-
-  /* Links */
-
-  .accordion-page a,
-  .accordion-page a:visited {
-    color: #c89cff;
-  }
-
-  .accordion-page a:hover {
-    color: #5edcea;
+    transform: none;
   }
 }
