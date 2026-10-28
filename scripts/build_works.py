@@ -122,7 +122,7 @@ page = """<!DOCTYPE html>
 <h2>BMI Works Catalog</h2>
 <p class="subtitle">WORK_COUNT registered works</p>
 
-<div class="catalog-search">
+<div class="accordion-search">
   <input
     type="search"
     id="work-search"
