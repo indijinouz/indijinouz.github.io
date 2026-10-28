@@ -4,29 +4,6 @@
    Homepage, Works Catalog, Royalty Statements
    ========================================= */
 
-body {
-  font-family: Arial, sans-serif;
-  margin: 30px;
-}
-
-table {
-  border-collapse: collapse;
-  font-size: 13px;
-}
-
-th, td {
-  border: 1px solid #ccc;
-  padding: 8px;
-  text-align: left;
-}
-
-th {
-  background: #eee;
-}
-
-tr:nth-child(even) {
-  background: #f8f8f8;
-}
 
 
 /* =========================================
@@ -228,9 +205,9 @@ tr:nth-child(even) {
   }
 }
 
-/* Works Catalog search */
+/* Accordion search */
 
-.accordion-page .catalog-search {
+.accordion-page .accordion-search {
   display: flex;
   flex-direction: row-reverse;
   align-items: center;
@@ -239,7 +216,7 @@ tr:nth-child(even) {
   margin-bottom: 28px;
 }
 
-.accordion-page .catalog-search input {
+.accordion-page .accordion-search input {
   flex: 0 1 300px;
   min-width: 0;
   padding: 12px 16px;
@@ -262,41 +239,13 @@ tr:nth-child(even) {
 }
 
 @media (prefers-color-scheme: dark) {
-  .accordion-page .catalog-search input {
+  .accordion-page .accordion-search input {
     background: #292e36;
     border-color: #414650;
     color: #f1f2f4;
   }
 
-  .accordion-page .catalog-search input::placeholder {
+  .accordion-page .accordion-search input::placeholder {
     color: #9099a6;
   }
-}
-
-
-/* =========================================
-   DIRECTORY STYLING
-   Shared by homepage and statement directory
-   ========================================= */
-
-.directory {
-  font-family: "Courier New", Courier, monospace;
-  font-size: 20px;
-  line-height: 2;
-}
-
-.directory .folder {
-  margin-top: 16px;
-}
-
-.directory .folder:first-child {
-  margin-top: 0;
-}
-
-.directory .folder-links {
-  margin-left: 30px;
-}
-
-.directory .folder-links div {
-  white-space: nowrap;
 }
