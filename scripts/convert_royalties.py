@@ -61,7 +61,6 @@ for csv_file in sorted(folder.glob("*.csv")):
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>BMI {html.escape(title)} | Michael Angelo Garcia (Indijinouz)</title>
-<link rel="stylesheet" href="/style.css">
 </head>
 <body>
 <h1>Michael Angelo Garcia (Indijinouz)</h1>
@@ -115,7 +114,6 @@ index_page = f"""<!DOCTYPE html>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>BMI Royalty Statements | Michael Angelo Garcia (Indijinouz)</title>
-<link rel="stylesheet" href="/style.css">
 </head>
 <body>
 <h1>Michael Angelo Garcia (Indijinouz)</h1>
