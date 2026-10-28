@@ -135,6 +135,10 @@ page = """<!DOCTYPE html>
 
 CONTENT
 
+<footer class="accordion-footer">
+  Source: <a href="/bmi-works-catalog/">BMI Works Catalog</a>
+</footer>
+
 <script>
 const searchInput = document.getElementById("work-search");
 const searchCount = document.getElementById("search-count");
