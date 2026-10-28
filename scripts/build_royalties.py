@@ -9,8 +9,8 @@ from typing import Dict, Iterable, Iterator, List, Mapping, MutableMapping, Tupl
 
 REPOSITORY = Path(__file__).resolve().parent.parent
 SOURCE = REPOSITORY / "bmi-royalty-statements"
-OUTPUT = REPOSITORY / "bmi-royalty-history.html"
-DATA_DIRECTORY = REPOSITORY / "bmi-royalty-history-data"
+OUTPUT = REPOSITORY / "bmi-royalty-records.html"
+DATA_DIRECTORY = REPOSITORY / "bmi-royalty-records-data"
 
 # Bundles normally contain about this many records. An individual episode is
 # never split, so an unusually large episode can make one bundle larger.
@@ -243,7 +243,7 @@ def html_sections(
                 parts.append(
                     f'<details class="episode" data-count="{len(rows)}" '
                     f'data-name="{escaped(episode)}" data-episode-id="{episode_id}" '
-                    f'data-chunk="bmi-royalty-history-data/{filename}">'
+                    f'data-chunk="bmi-royalty-records-data/{filename}">'
                     f'<summary>{escaped(episode)}'
                     f'<span class="count">{len(rows):,}</span></summary>'
                     '<div class="episode-records"></div></details>'
@@ -274,14 +274,14 @@ def build_page(headers: List[str], sections: str, total: int) -> str:
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>BMI Royalty History | Michael Angelo Garcia (Indijinouz)</title>
+<title>BMI Royalty Records | Michael Angelo Garcia (Indijinouz)</title>
 <link rel="stylesheet" href="/style.css">
 </head>
 
 <body class="accordion-page">
 
 <h1>Michael Angelo Garcia (Indijinouz)</h1>
-<h2>BMI Royalty History</h2>
+<h2>BMI Royalty Records</h2>
 <p class="subtitle">RECORD_COUNT records</p>
 
 <form class="accordion-search" id="royalty-search-form">
@@ -289,7 +289,7 @@ def build_page(headers: List[str], sections: str, total: int) -> str:
     type="search"
     id="royalty-search"
     placeholder="Search titles, shows, episodes..."
-    aria-label="Search Royalty History"
+    aria-label="Search Royalty Records"
     autocomplete="off"
   >
   <span id="search-count" aria-live="polite">Press Enter to search</span>
@@ -365,7 +365,7 @@ showSort.addEventListener("change", updateSorting);
 
 function fetchSearchIndex() {
   if (!searchIndexRequest) {
-    searchIndexRequest = fetch("bmi-royalty-history-data/search-index.json")
+    searchIndexRequest = fetch("bmi-royalty-records-data/search-index.json")
       .then(response => {
         if (!response.ok) {
           throw new Error(`HTTP ${response.status} while loading the search index`);
