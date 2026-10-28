@@ -349,3 +349,184 @@ body:has(.site-navigation) h1 {
     color: #9099a6;
   }
 }
+
+/* =========================================
+   PURPLE / BLUE / CYAN GRADIENT THEME
+   ========================================= */
+
+@media (prefers-color-scheme: dark) {
+
+  /* Shared page background */
+
+  html:has(.site-navigation),
+  html:has(body.accordion-page) {
+    background:
+      radial-gradient(
+        circle at 10% 25%,
+        rgba(123, 31, 255, 0.22),
+        transparent 38%
+      ),
+      radial-gradient(
+        circle at 90% 80%,
+        rgba(18, 200, 223, 0.18),
+        transparent 42%
+      ),
+      linear-gradient(
+        145deg,
+        #100829 0%,
+        #101633 38%,
+        #0c2441 72%,
+        #083348 100%
+      );
+    background-attachment: fixed;
+  }
+
+  body:has(.site-navigation),
+  .accordion-page {
+    background: transparent;
+    color: #f7f8ff;
+  }
+
+  /* Homepage */
+
+  .site-navigation a {
+    border: 1px solid rgba(164, 171, 222, 0.16);
+    background:
+      linear-gradient(
+        115deg,
+        rgba(93, 44, 168, 0.55),
+        rgba(24, 65, 126, 0.55)
+      );
+    color: #f7f8ff;
+  }
+
+  .site-navigation a::after {
+    color: #5edcea;
+  }
+
+  .site-navigation a:hover {
+    background:
+      linear-gradient(
+        115deg,
+        rgba(117, 54, 202, 0.7),
+        rgba(28, 91, 151, 0.7)
+      );
+  }
+
+  .site-navigation a:focus-visible {
+    outline: 2px solid #7bdc65;
+    outline-offset: 3px;
+  }
+
+  /* Page title */
+
+  .accordion-page h2 {
+    background: linear-gradient(
+      90deg,
+      #d8b7ff,
+      #83aaff,
+      #5edcea
+    );
+    background-clip: text;
+    -webkit-background-clip: text;
+    color: transparent;
+  }
+
+  .accordion-page .subtitle,
+  .accordion-page .count,
+  .accordion-page #search-count,
+  .accordion-page .sort-controls label,
+  .accordion-page .accordion-footer {
+    color: #aeb3d0;
+  }
+
+  /* Accordion levels */
+
+  .accordion-page .country > summary {
+    border-left: 3px solid #9661ff;
+    background: linear-gradient(
+      100deg,
+      #4d287e,
+      #2a427c
+    );
+    color: #f7f8ff;
+  }
+
+  .accordion-page .show > summary {
+    border-left: 3px solid #4e9cff;
+    background: linear-gradient(
+      100deg,
+      #243c70,
+      #185678
+    );
+    color: #f7f8ff;
+  }
+
+  .accordion-page .episode > summary {
+    border-left: 3px solid #42d8e5;
+    background: linear-gradient(
+      100deg,
+      #163c5a,
+      #125368
+    );
+    color: #f7f8ff;
+  }
+
+  .accordion-page summary:focus-visible {
+    outline: 2px solid #7bdc65;
+    outline-offset: 3px;
+  }
+
+  /* Search and sorting controls */
+
+  .accordion-page .accordion-search input,
+  .accordion-page .sort-controls select {
+    border-color: #344a6d;
+    background: #17233b;
+    color: #f7f8ff;
+  }
+
+  .accordion-page .accordion-search input::placeholder {
+    color: #9ba3c0;
+  }
+
+  .accordion-page .accordion-search input:focus,
+  .accordion-page .sort-controls select:focus {
+    border-color: #42d8e5;
+    outline: 2px solid rgba(66, 216, 229, 0.28);
+  }
+
+  /* Tables */
+
+  .accordion-page .table-wrap {
+    border-color: #294c69;
+    background: #0e2238;
+  }
+
+  .accordion-page th {
+    border-bottom-color: #315675;
+    background: #213d61;
+    color: #f4f6ff;
+  }
+
+  .accordion-page td {
+    border-bottom-color: #294c69;
+    background: #0e2238;
+    color: #f0f3ff;
+  }
+
+  .accordion-page tr:nth-child(even) td {
+    background: #172e49;
+  }
+
+  /* Links */
+
+  .accordion-page a,
+  .accordion-page a:visited {
+    color: #c89cff;
+  }
+
+  .accordion-page a:hover {
+    color: #5edcea;
+  }
+}
