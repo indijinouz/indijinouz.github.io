@@ -575,7 +575,7 @@ document.addEventListener("click", event => {
 """
     return (
         template.replace("RECORD_COUNT", f"{total:,}")
-        ..replace("CONTENT", sections)
+        .replace("CONTENT", sections)
         .replace("LATEST_PERIOD", escaped(latest_period))
         .replace("HEADERS", script_json(headers))
         .replace("RENDER_BATCH_SIZE", str(RENDER_BATCH_SIZE))
