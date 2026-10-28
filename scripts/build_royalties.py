@@ -283,7 +283,7 @@ def build_page(headers: List[str], sections: str, total: int) -> str:
 <h2>BMI Royalty History</h2>
 <p class="subtitle">RECORD_COUNT records</p>
 
-<form class="catalog-search" id="royalty-search-form">
+<form class="accordion-search" id="royalty-search-form">
   <input
     type="search"
     id="royalty-search"
