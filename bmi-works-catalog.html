@@ -13,7 +13,7 @@
 <h2>BMI Works Catalog</h2>
 <p class="subtitle">2,629 registered works</p>
 
-<div class="accordion-search">
+<form class="accordion-search" id="work-search-form">
   <input
     type="search"
     id="work-search"
@@ -21,8 +21,8 @@
     aria-label="Search Works Catalog"
     autocomplete="off"
   >
-  <span id="search-count" aria-live="polite"></span>
-</div>
+  <span id="search-count" aria-live="polite">Press Enter to search</span>
+</form>
 
 <details class="country work" data-search="15083919 006 nylon with strings p o six nations 50.00 00489508798 bmi      11/12/2012 works registration t9091355372 reconciled 15083919 006 nylon with strings w   bennett jerome mykael (mr) 85.00 00519963415 bmi      11/12/2012 works registration t9091355372 reconciled 15083919 006 nylon with strings w   garcia michael angelo 15.00 00526514561 bmi      11/12/2012 works registration t9091355372 reconciled 15083919 006 nylon with strings p o bigtime heat 50.00 00685974084 bmi      11/12/2012 works registration t9091355372 reconciled"><summary>006 NYLON WITH STRINGS<span class="count">BMI #15083919</span></summary>
 <div class="table-wrap"><table><thead><tr>
@@ -183631,6 +183631,7 @@
 </footer>
 
 <script>
+const searchForm = document.getElementById("work-search-form");
 const searchInput = document.getElementById("work-search");
 const searchCount = document.getElementById("search-count");
 
@@ -183663,14 +183664,12 @@ function filterWorks() {
     searchableWorks.length.toLocaleString() + " works";
 }
 
-// Update search results as the user types.
+// Search only after Enter is pressed.
 
-searchInput.addEventListener("input", filterWorks);
-
-// Display initial count.
-
-searchCount.textContent =
-  searchableWorks.length.toLocaleString() + " works";
+searchForm.addEventListener("submit", event => {
+  event.preventDefault();
+  filterWorks();
+});
 
 /* Option-click (Mac) / Alt-click (Windows):
    Collapse all expanded compositions. */
