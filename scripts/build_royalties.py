@@ -267,7 +267,13 @@ def script_json(value: object) -> str:
     )
 
 
-def build_page(headers: List[str], sections: str, total: int) -> str:
+def build_page(
+    headers: List[str],
+    sections: str,
+    total: int,
+    latest_period: str,
+) -> str:
+    
     template = """<!DOCTYPE html>
 <html lang="en">
 <head>
@@ -313,6 +319,11 @@ def build_page(headers: List[str], sections: str, total: int) -> str:
 </div>
 
 CONTENT
+
+<footer class="accordion-footer">
+  Source: <a href="/bmi-royalty-statements/">BMI Royalty Statements</a>
+  · Latest Period: LATEST_PERIOD
+</footer>
 
 <script>
 "use strict";
@@ -564,7 +575,8 @@ document.addEventListener("click", event => {
 """
     return (
         template.replace("RECORD_COUNT", f"{total:,}")
-        .replace("CONTENT", sections)
+        ..replace("CONTENT", sections)
+        .replace("LATEST_PERIOD", escaped(latest_period))
         .replace("HEADERS", script_json(headers))
         .replace("RENDER_BATCH_SIZE", str(RENDER_BATCH_SIZE))
     )
@@ -572,12 +584,16 @@ document.addEventListener("click", event => {
 
 def main() -> None:
     headers, data, total = read_source()
+    latest_period = max(path.stem for path in SOURCE.glob("*.csv"))
     episodes = list(sorted_hierarchy(data))
     locations = write_chunks(episodes, headers)
     write_search_index(episodes, headers, locations)
     sections = html_sections(data, locations)
-    OUTPUT.write_text(build_page(headers, sections, total), encoding="utf-8")
-
+    OUTPUT.write_text(
+        build_page(headers, sections, total, latest_period),
+        encoding="utf-8",
+    )
+    
     chunks = len(list(DATA_DIRECTORY.glob("chunk-*.json")))
     print(
         f"Created {OUTPUT.name} with {total:,} records in "
