@@ -122,7 +122,7 @@ page = """<!DOCTYPE html>
 <h2>BMI Works Catalog</h2>
 <p class="subtitle">WORK_COUNT registered works</p>
 
-<div class="accordion-search">
+<form class="accordion-search" id="work-search-form">
   <input
     type="search"
     id="work-search"
@@ -130,8 +130,8 @@ page = """<!DOCTYPE html>
     aria-label="Search Works Catalog"
     autocomplete="off"
   >
-  <span id="search-count" aria-live="polite"></span>
-</div>
+  <span id="search-count" aria-live="polite">Press Enter to search</span>
+</form>
 
 CONTENT
 
@@ -140,6 +140,7 @@ CONTENT
 </footer>
 
 <script>
+const searchForm = document.getElementById("work-search-form");
 const searchInput = document.getElementById("work-search");
 const searchCount = document.getElementById("search-count");
 
@@ -172,14 +173,12 @@ function filterWorks() {
     searchableWorks.length.toLocaleString() + " works";
 }
 
-// Update search results as the user types.
+// Search only after Enter is pressed.
 
-searchInput.addEventListener("input", filterWorks);
-
-// Display initial count.
-
-searchCount.textContent =
-  searchableWorks.length.toLocaleString() + " works";
+searchForm.addEventListener("submit", event => {
+  event.preventDefault();
+  filterWorks();
+});
 
 /* Option-click (Mac) / Alt-click (Windows):
    Collapse all expanded compositions. */
