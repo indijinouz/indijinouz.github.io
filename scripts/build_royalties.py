@@ -322,7 +322,7 @@ CONTENT
 
 <footer class="accordion-footer">
   Source: <a href="/bmi-royalty-statements/">BMI Royalty Statements</a>
-  · Latest Period: LATEST_PERIOD
+  · Latest period: LATEST_PERIOD
 </footer>
 
 <script>
