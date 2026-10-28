@@ -135,6 +135,9 @@ body:has(.site-navigation) h1 {
 
 .accordion-page .accordion-footer {
   padding-top: 24px;
+  color: #77808b;
+  font-size: 14px;
+  text-align: right;
 }
 
 /* Sorting controls */
