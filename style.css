@@ -616,12 +616,6 @@ body:has(.site-navigation) h1 {
     margin-left: 12px;
   }
 
-  .accordion-page .count {
-    float: none;
-    display: block;
-    margin-top: 3px;
-  }
-
   .accordion-page .table-wrap {
     margin-left: 0;
   }
