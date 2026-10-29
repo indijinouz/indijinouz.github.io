@@ -444,14 +444,8 @@ body:has(.site-navigation) h1 {
 }
 
 .accordion-page th {
-  border-bottom-color: #456b91;
-  background:
-    linear-gradient(
-      100deg,
-      #35286f,
-      #224779,
-      #176078
-    );
+  border-bottom-color: #294c69;
+  background: #163c5a;
   color: var(--text-primary);
   font-weight: 650;
 }
