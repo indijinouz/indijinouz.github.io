@@ -407,18 +407,24 @@ body:has(.site-navigation) h1 {
   color: #83aaff;
 }
 
-
 /* Episode level */
 
 .accordion-page .episode {
   margin-left: 22px;
 }
 
-.accordion-page th {
-  border-bottom-color: #294c69;
-  background: #176078;
+.accordion-page .episode > summary {
+  border-left: 3px solid var(--cyan);
+  background: rgba(8, 10, 35, 0.38);
   color: var(--text-primary);
-  font-weight: 650;
+
+  box-shadow:
+    inset 0 0 0 1px rgba(66, 216, 229, 0.08),
+    0 8px 20px rgba(0, 0, 0, 0.12);
+}
+
+.accordion-page .episode > summary::marker {
+  color: var(--cyan-light);
 }
 
 .accordion-page .episode > summary::marker {
