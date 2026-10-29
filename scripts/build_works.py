@@ -279,11 +279,8 @@ function buildParticipantView() {
     });
   });
 
-  const extraIndicators = Array.from(groupedRows.keys())
-    .filter(indicator => indicator !== "W" && indicator !== "P")
-    .sort((left, right) => left.localeCompare(right));
-
-  const indicatorOrder = ["W", "P", ...extraIndicators];
+  const indicatorOrder = Array.from(groupedRows.keys())
+  .sort((left, right) => left.localeCompare(right));
 
   indicatorOrder.forEach(indicator => {
     const indicatorGroup = groupedRows.get(indicator);
@@ -294,6 +291,8 @@ function buildParticipantView() {
 
     indicatorSection.className =
       "country participant-group";
+
+    indicatorSection.open = true;
 
     indicatorSection.appendChild(
       createSummary(indicator)
