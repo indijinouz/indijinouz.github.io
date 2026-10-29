@@ -199,21 +199,18 @@ body:has(.site-navigation) h1 {
 }
 
 .accordion-page h2 {
-  display: inline-block;
   margin-top: 18px;
   margin-bottom: 8px;
-  color: #e2c8ff;
+  color: #d8b7ff;
   background: linear-gradient(
-    92deg,
-    #e2c8ff 0%,
-    #bd9dff 32%,
-    #8faaff 66%,
-    #72e4ee 100%
+    90deg,
+    #d8b7ff,
+    #83aaff,
+    var(--cyan-light)
   );
   background-clip: text;
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
-  filter: drop-shadow(0 4px 18px rgba(111, 93, 255, 0.2));
 }
 
 .accordion-page .subtitle {
