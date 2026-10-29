@@ -194,7 +194,7 @@ body:has(.site-navigation) h1 {
 .accordion-page h1 .home-link:visited,
 .accordion-page h1 .home-link:hover,
 .accordion-page h1 .home-link:active {
-  color: inherit;
+  color: var(--text-primary);
   text-decoration: none;
 }
 
