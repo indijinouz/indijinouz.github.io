@@ -280,7 +280,7 @@ def build_page(headers: List[str], sections: str, total: int) -> str:
 
 <body class="accordion-page">
 
-<h1>Michael Angelo Garcia (Indijinouz)</h1>
+<h1><a class="home-link" href="/">Michael Angelo Garcia (Indijinouz)</a></h1>
 <h2>BMI Royalty Records</h2>
 <p class="subtitle">RECORD_COUNT records</p>
 
