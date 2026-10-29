@@ -220,16 +220,27 @@ body:has(.site-navigation) h1 {
 .accordion-page .accordion-search input {
   flex: 0 1 300px;
   min-width: 0;
-  padding: 13px 17px;
-  border: 1px solid rgba(255, 255, 255, 0.22);
-  border-radius: 14px;
+  padding: 13px 17px 13px 48px;
+
+  border: 2px solid transparent;
+  border-radius: 16px;
 
   background:
-    linear-gradient(
-      135deg,
-      rgba(255, 255, 255, 0.15),
-      rgba(255, 255, 255, 0.06)
-    );
+  url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%235edcea' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Ccircle cx='11' cy='11' r='7'/%3E%3Cpath d='m16.5 16.5 4 4'/%3E%3C/svg%3E")
+    17px center / 19px 19px no-repeat,
+
+  linear-gradient(
+    115deg,
+    rgba(10, 10, 35, 0.82),
+    rgba(8, 35, 55, 0.76)
+  ) padding-box,
+
+  linear-gradient(
+    105deg,
+    #a56bff,
+    #4e9cff,
+    #42d8e5
+  ) border-box;
 
   -webkit-backdrop-filter: blur(18px) saturate(150%);
   backdrop-filter: blur(18px) saturate(150%);
@@ -239,12 +250,11 @@ body:has(.site-navigation) h1 {
   font-size: 14px;
 
   box-shadow:
-    inset 0 1px 0 rgba(255, 255, 255, 0.22),
-    inset 0 -1px 0 rgba(255, 255, 255, 0.05),
-    0 10px 30px rgba(0, 0, 0, 0.2);
+    inset 0 1px 0 rgba(255, 255, 255, 0.17),
+    0 12px 28px rgba(0, 0, 0, 0.2);
 
   transition:
-    border-color 150ms ease,
+    filter 150ms ease,
     box-shadow 150ms ease;
 }
 
@@ -254,21 +264,25 @@ body:has(.site-navigation) h1 {
 }
 
 .accordion-page .accordion-search input:hover {
-  border-color: var(--blue);
+  filter: brightness(1.08);
+
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.2),
+    0 14px 32px rgba(0, 0, 0, 0.24);
 }
 
 .accordion-page .accordion-search input:focus {
-  border-color: rgba(94, 220, 234, 0.8);
+  border-color: transparent;
   outline: none;
 
   box-shadow:
-    inset 0 1px 0 rgba(255, 255, 255, 0.25),
-    0 0 0 3px rgba(66, 216, 229, 0.18),
-    0 12px 34px rgba(0, 0, 0, 0.24);
+    inset 0 1px 0 rgba(255, 255, 255, 0.22),
+    0 0 0 3px rgba(66, 216, 229, 0.2),
+    0 14px 34px rgba(0, 0, 0, 0.25);
 }
 
 .accordion-page #search-count {
-  color: var(--text-muted);
+  color: var(--gold);
   font-size: 12px;
   white-space: nowrap;
 }
