@@ -14,6 +14,8 @@
   --cyan: #42d8e5;
   --cyan-light: #5edcea;
   --lime: #7bdc65;
+  --gold: #f3bd55;
+  --gold-hover: #ffe08a;
 
   --text-primary: #f7f8ff;
   --text-secondary: #d9dcef;
@@ -198,7 +200,7 @@ body:has(.site-navigation) h1 {
 
 .accordion-page .subtitle {
   margin-bottom: 24px;
-  color: var(--text-muted);
+  color: var(--text-gold);
 }
 
 
@@ -508,11 +510,11 @@ body:has(.site-navigation) h1 {
 
 .accordion-page a,
 .accordion-page a:visited {
-  color: var(--purple-link);
+  color: var(--gold);
 }
 
 .accordion-page a:hover {
-  color: var(--cyan-light);
+  color: var(--gold-hover);
 }
 
 .accordion-page a:focus-visible {
