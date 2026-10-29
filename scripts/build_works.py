@@ -190,25 +190,26 @@ let participantViewBuilt = false;
 let participantSections = [];
 let participantGroups = [];
 
-function countLabel(count, view) {
-  if (view === "participant") {
-    return count.toLocaleString() +
-      (count === 1 ? " Participant" : " Participants");
-  }
 
+function countLabel(count) {
   return count.toLocaleString() +
     (count === 1 ? " Work" : " Works");
 }
 
+
 function normalizeHeader(value) {
-  return value.toLowerCase().replace(/[^a-z0-9]/g, "");
+  return value
+    .toLowerCase()
+    .replace(/[^a-z0-9]/g, "");
 }
+
 
 function createSummary(text) {
   const summary = document.createElement("summary");
   summary.textContent = text;
   return summary;
 }
+
 
 function buildParticipantView() {
   if (participantViewBuilt) return;
@@ -228,16 +229,27 @@ function buildParticipantView() {
     normalizeHeader(cell.textContent.trim())
   );
 
-  const indicatorIndex = headerNames.indexOf("wtrpubindicator");
-  const participantIndex = headerNames.indexOf("participant");
+  const titleNumberIndex =
+    headerNames.indexOf("titlenumber");
 
-  if (indicatorIndex === -1 || participantIndex === -1) {
+  const indicatorIndex =
+    headerNames.indexOf("wtrpubindicator");
+
+  const participantIndex =
+    headerNames.indexOf("participant");
+
+  if (
+    titleNumberIndex === -1 ||
+    indicatorIndex === -1 ||
+    participantIndex === -1
+  ) {
     throw new Error(
-      "WtrPubIndicator and Participant columns are required."
+      "TitleNumber, WtrPubIndicator, and Participant columns are required."
     );
   }
 
   const groupedRows = new Map();
+
   groupedRows.set("W", new Map());
   groupedRows.set("P", new Map());
 
@@ -250,14 +262,16 @@ function buildParticipantView() {
       ).trim().toUpperCase() || "Other";
 
       const participant = (
-        cells[participantIndex]?.textContent || "Unknown Participant"
+        cells[participantIndex]?.textContent ||
+        "Unknown Participant"
       ).trim() || "Unknown Participant";
 
       if (!groupedRows.has(indicator)) {
         groupedRows.set(indicator, new Map());
       }
 
-      const indicatorGroup = groupedRows.get(indicator);
+      const indicatorGroup =
+        groupedRows.get(indicator);
 
       if (!indicatorGroup.has(participant)) {
         indicatorGroup.set(participant, {
@@ -266,9 +280,12 @@ function buildParticipantView() {
         });
       }
 
-      const participantGroup = indicatorGroup.get(participant);
+      const participantGroup =
+        indicatorGroup.get(participant);
 
-      participantGroup.rows.push(row.cloneNode(true));
+      participantGroup.rows.push(
+        row.cloneNode(true)
+      );
 
       participantGroup.searchValues.push(
         cells
@@ -279,18 +296,32 @@ function buildParticipantView() {
     });
   });
 
-  const indicatorOrder = Array.from(groupedRows.keys())
-  .sort((left, right) => left.localeCompare(right));
+  // Alphabetically places Publishers before Writers.
+
+  const indicatorOrder =
+    Array.from(groupedRows.keys()).sort(
+      (left, right) =>
+        left.localeCompare(right)
+    );
 
   indicatorOrder.forEach(indicator => {
-    const indicatorGroup = groupedRows.get(indicator);
+    const indicatorGroup =
+      groupedRows.get(indicator);
 
-    if (!indicatorGroup || indicatorGroup.size === 0) return;
+    if (
+      !indicatorGroup ||
+      indicatorGroup.size === 0
+    ) {
+      return;
+    }
 
-    const indicatorSection = document.createElement("details");
+    const indicatorSection =
+      document.createElement("details");
 
     indicatorSection.className =
       "country participant-group";
+
+    // Publishers and Writers begin open.
 
     indicatorSection.open = true;
 
@@ -323,16 +354,51 @@ function buildParticipantView() {
         participantSection.className =
           "show participant";
 
-        participantSection.appendChild(
-          createSummary(participant)
+        // Count each BMI work only once for this participant.
+
+        const workIds = new Set(
+          participantData.rows
+            .map(row =>
+              (
+                row.cells[titleNumberIndex]
+                  ?.textContent || ""
+              ).trim()
+            )
+            .filter(Boolean)
         );
 
-        const tableWrap = document.createElement("div");
+        const participantSummary =
+          createSummary(participant);
+
+        const participantCount =
+          document.createElement("span");
+
+        participantCount.className = "count";
+
+        participantCount.textContent =
+          workIds.size.toLocaleString();
+
+        participantSummary.appendChild(
+          participantCount
+        );
+
+        participantSection.appendChild(
+          participantSummary
+        );
+
+        const tableWrap =
+          document.createElement("div");
+
         tableWrap.className = "table-wrap";
 
-        const table = document.createElement("table");
-        const tableHead = firstTable.tHead.cloneNode(true);
-        const tableBody = document.createElement("tbody");
+        const table =
+          document.createElement("table");
+
+        const tableHead =
+          firstTable.tHead.cloneNode(true);
+
+        const tableBody =
+          document.createElement("tbody");
 
         participantData.rows.forEach(row => {
           tableBody.appendChild(row);
@@ -342,10 +408,13 @@ function buildParticipantView() {
         table.appendChild(tableBody);
         tableWrap.appendChild(table);
         participantSection.appendChild(tableWrap);
-        indicatorSection.appendChild(participantSection);
+        indicatorSection.appendChild(
+          participantSection
+        );
 
         participantSections.push({
           element: participantSection,
+          workIds: workIds,
           text: (
             indicator + " " +
             participant + " " +
@@ -356,11 +425,15 @@ function buildParticipantView() {
     );
 
     participantGroups.push(indicatorSection);
-    participantView.appendChild(indicatorSection);
+
+    participantView.appendChild(
+      indicatorSection
+    );
   });
 
   participantViewBuilt = true;
 }
+
 
 function filterTitleView(query) {
   let visible = 0;
@@ -377,20 +450,24 @@ function filterTitleView(query) {
   });
 
   searchCount.textContent =
-    countLabel(visible, "title");
+    countLabel(visible);
 }
 
+
 function filterParticipantView(query) {
-  let visible = 0;
+  const visibleWorkIds = new Set();
 
   participantSections.forEach(participant => {
     const matches =
-      !query || participant.text.includes(query);
+      !query ||
+      participant.text.includes(query);
 
     participant.element.hidden = !matches;
 
     if (matches) {
-      visible += 1;
+      participant.workIds.forEach(workId => {
+        visibleWorkIds.add(workId);
+      });
     }
   });
 
@@ -404,9 +481,13 @@ function filterParticipantView(query) {
     group.hidden = !hasVisibleParticipant;
   });
 
+  // Show the number of unique matching works,
+  // rather than the number of matching participants.
+
   searchCount.textContent =
-    countLabel(visible, "participant");
+    countLabel(visibleWorkIds.size);
 }
+
 
 function filterActiveView() {
   if (activeView === "participant") {
@@ -416,6 +497,7 @@ function filterActiveView() {
   }
 }
 
+
 function changeView() {
   activeView = viewSort.value;
 
@@ -423,57 +505,76 @@ function changeView() {
     buildParticipantView();
   }
 
-  titleView.hidden = activeView !== "title";
+  titleView.hidden =
+    activeView !== "title";
+
   participantView.hidden =
     activeView !== "participant";
 
   filterActiveView();
 }
 
+
 searchCount.textContent =
-  countLabel(workSections.length, "title");
+  countLabel(workSections.length);
 
 
 // Search only after Enter is pressed.
 
-searchForm.addEventListener("submit", event => {
-  event.preventDefault();
+searchForm.addEventListener(
+  "submit",
+  event => {
+    event.preventDefault();
 
-  submittedQuery =
-    searchInput.value.trim().toLowerCase();
+    submittedQuery =
+      searchInput.value
+        .trim()
+        .toLowerCase();
 
-  filterActiveView();
-});
+    filterActiveView();
+  }
+);
 
 
-viewSort.addEventListener("change", changeView);
+viewSort.addEventListener(
+  "change",
+  changeView
+);
 
 
 /* Option-click (Mac) / Alt-click (Windows):
    Collapse all expanded sections in the active view. */
 
-document.addEventListener("click", event => {
-  if (!event.altKey) return;
+document.addEventListener(
+  "click",
+  event => {
+    if (!event.altKey) return;
 
-  const summary = event.target.closest("summary");
+    const summary =
+      event.target.closest("summary");
 
-  if (!summary) return;
+    if (!summary) return;
 
-  const activeContainer =
-    activeView === "participant"
-      ? participantView
-      : titleView;
+    const activeContainer =
+      activeView === "participant"
+        ? participantView
+        : titleView;
 
-  if (!activeContainer.contains(summary)) return;
+    if (
+      !activeContainer.contains(summary)
+    ) {
+      return;
+    }
 
-  event.preventDefault();
+    event.preventDefault();
 
-  activeContainer
-    .querySelectorAll("details")
-    .forEach(section => {
-      section.open = false;
-    });
-});
+    activeContainer
+      .querySelectorAll("details")
+      .forEach(section => {
+        section.open = false;
+      });
+  }
+);
 </script>
 
 </body>
