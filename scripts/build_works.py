@@ -294,8 +294,15 @@ function buildParticipantView() {
 
     indicatorSection.open = true;
 
+    const indicatorLabel =
+      indicator === "P"
+        ? "Publishers"
+        : indicator === "W"
+          ? "Writers"
+          : indicator;
+
     indicatorSection.appendChild(
-      createSummary(indicator)
+      createSummary(indicatorLabel)
     );
 
     const sortedParticipants =
