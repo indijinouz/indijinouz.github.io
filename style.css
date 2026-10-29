@@ -200,7 +200,7 @@ body:has(.site-navigation) h1 {
 
 .accordion-page .subtitle {
   margin-bottom: 24px;
-  color: var(--text-gold);
+  color: var(--gold);
 }
 
 
