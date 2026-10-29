@@ -25,6 +25,13 @@
   --table-border: #315675;
 }
 
+a,
+a:visited,
+a:hover,
+a:active {
+  text-decoration: none;
+}
+
 
 /* =========================================
    SHARED PAGE BACKGROUND
@@ -181,6 +188,14 @@ body:has(.site-navigation) h1 {
   margin-bottom: 4px;
   color: var(--text-primary);
   font-size: 30px;
+}
+
+.accordion-page h1 .home-link,
+.accordion-page h1 .home-link:visited,
+.accordion-page h1 .home-link:hover,
+.accordion-page h1 .home-link:active {
+  color: inherit;
+  text-decoration: none;
 }
 
 .accordion-page h2 {
