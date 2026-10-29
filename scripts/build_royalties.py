@@ -292,7 +292,7 @@ def build_page(headers: List[str], sections: str, total: int) -> str:
     aria-label="Search Royalty Records"
     autocomplete="off"
   >
-  <span id="search-count" aria-live="polite">Press Enter to search</span>
+  <span id="search-count" aria-live="polite"></span>
 </form>
 
 <div class="sort-controls">
@@ -330,6 +330,9 @@ const accordion = document.getElementById("royalty-accordion");
 const searchForm = document.getElementById("royalty-search-form");
 const searchInput = document.getElementById("royalty-search");
 const searchCount = document.getElementById("search-count");
+searchCount.textContent =
+  accordion.querySelectorAll("details.episode").length.toLocaleString() +
+  " episodes";
 const chunkRequests = new Map();
 const renderStates = new WeakMap();
 let searchIndexRequest;
@@ -413,7 +416,9 @@ searchForm.addEventListener("submit", async event => {
 
   if (!query) {
     showAllSections();
-    searchCount.textContent = "Press Enter to search";
+    searchCount.textContent =
+    accordion.querySelectorAll("details.episode").length.toLocaleString() +
+    " episodes";
     return;
   }
 
@@ -445,7 +450,9 @@ searchInput.addEventListener("keydown", event => {
   searchInput.value = "";
   searchSequence += 1;
   showAllSections();
-  searchCount.textContent = "Press Enter to search";
+  searchCount.textContent =
+    accordion.querySelectorAll("details.episode").length.toLocaleString() +
+    " episodes";
 });
 
 function fetchChunk(url) {
