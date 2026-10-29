@@ -310,12 +310,7 @@ body:has(.site-navigation) h1 {
   padding: 7px 10px;
   border: 1px solid var(--control-border);
   border-radius: 8px;
-  background:
-    linear-gradient(
-      115deg,
-      rgba(32, 34, 83, 0.96),
-      rgba(18, 70, 94, 0.96)
-    );
+  background: #17233b;
   color: var(--text-primary);
   color-scheme: dark;
   font: inherit;
