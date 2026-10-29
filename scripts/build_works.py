@@ -130,7 +130,7 @@ page = """<!DOCTYPE html>
     aria-label="Search Works Catalog"
     autocomplete="off"
   >
-  <span id="search-count" aria-live="polite">Press Enter to search</span>
+  <span id="search-count" aria-live="polite"></span>
 </form>
 
 CONTENT
@@ -147,6 +147,9 @@ const searchCount = document.getElementById("search-count");
 const workSections = Array.from(
   document.querySelectorAll("details.work")
 );
+
+searchCount.textContent =
+  workSections.length.toLocaleString() + " works";
 
 // Cache searchable text once.
 
@@ -169,8 +172,8 @@ function filterWorks() {
   });
 
   searchCount.textContent =
-    visible.toLocaleString() + " of " +
-    searchableWorks.length.toLocaleString() + " works";
+    visible.toLocaleString() +
+    (visible === 1 ? " Work" : " Works");
 }
 
 // Search only after Enter is pressed.
