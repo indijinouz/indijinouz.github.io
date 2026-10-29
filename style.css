@@ -324,13 +324,28 @@ body:has(.site-navigation) h1 {
 .accordion-page .sort-controls select {
   margin-left: 7px;
   padding: 7px 10px;
-  border: 1px solid var(--control-border);
+  border: 1px solid transparent;
   border-radius: 8px;
-  background: #17233b;
+
+  background:
+  linear-gradient(
+    115deg,
+    rgba(10, 10, 35, 0.82),
+    rgba(8, 35, 55, 0.76)
+  ) padding-box,
+
+  linear-gradient(
+    105deg,
+    #a56bff,
+    #4e9cff,
+    #42d8e5
+  ) border-box;
+   
   color: var(--text-primary);
   color-scheme: dark;
   font: inherit;
   cursor: pointer;
+   
   box-shadow:
     inset 0 1px 0 rgba(255, 255, 255, 0.06),
     0 6px 18px rgba(0, 0, 0, 0.12);
