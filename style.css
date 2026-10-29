@@ -54,6 +54,7 @@ html:has(body.accordion-page) {
       var(--page-blue) 72%,
       var(--page-end) 100%
     );
+   background-attachment: fixed;
 }
 
 
