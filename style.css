@@ -34,30 +34,15 @@ a:active {
 
 
 /* =========================================
-   SHARED FIXED PAGE BACKGROUND
+   SHARED PAGE BACKGROUND
+   Only applies to the homepage and accordion
+   pages. Source pages remain unstyled.
    ========================================= */
 
 html:has(.site-navigation),
 html:has(body.accordion-page) {
   min-height: 100%;
   color-scheme: dark;
-  background: var(--page-start);
-}
-
-body:has(.site-navigation),
-body.accordion-page {
-  position: relative;
-  isolation: isolate;
-}
-
-body:has(.site-navigation)::before,
-body.accordion-page::before {
-  content: "";
-  position: fixed;
-  inset: 0;
-  z-index: -1;
-  pointer-events: none;
-
   background:
     radial-gradient(
       circle at 10% 25%,
@@ -76,6 +61,7 @@ body.accordion-page::before {
       var(--page-blue) 72%,
       var(--page-end) 100%
     );
+   background-attachment: fixed;
 }
 
 
